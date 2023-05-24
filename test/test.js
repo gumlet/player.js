@@ -2,7 +2,7 @@
 var FRAMES = [
   'http://localhost.com:8003/test/mock.html',
   'http://localhost.com:8003/test/html.html',
-  'http://localhost.com:8003/test/video.html',
+  'http://localhost.com:8003/test/video.html'
 ];
 
 var isNumber= function(obj){
