@@ -11,6 +11,9 @@
   "author": {
     "name": "Gumlet"
   },
+  "scripts": {
+    "prepublishOnly": "grunt package"
+  },
   "files": [
     "dist/*"
   ],
