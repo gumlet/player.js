@@ -228,7 +228,7 @@ fires when the media is loading additional media for playback:
 fires during playback:
 
 ```js
-data: {
+{
   seconds: 10,
   duration: 40
 }
@@ -244,10 +244,22 @@ fires when the video is paused.
 fires when the video is finished.
 
 `fullscreenChange`
-fires when the video fullscreen is changed
+fires when the video fullscreen is changed:
+
+```js
+{
+  isFullScreen: true // or false
+}
+```
 
 `pipChange`
 fires when the video is put to or brought back from picture-in-picture.
+
+```js
+{
+  isPIP: true // or false
+}
+```
 
 `playbackRateChange`
 fires when the video playback rate is changed by user.
@@ -258,8 +270,21 @@ fires when the audio track of video is changed.
 `qualityChange`
 fires when the video quality is changed.
 
+```js
+{
+  quality: '720p'
+}
+```
+
 `seeked`
-fires when the video has been seeked by the user.
+fires when the video has been seeked by the user. Gives seeked to time in seconds and total duration of video.
+
+```js
+{
+  seconds: 10
+  duration: 50
+}
+```
 
 `error`
 fires when an error occurs.
