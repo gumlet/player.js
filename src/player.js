@@ -19,7 +19,13 @@ playerjs.EVENTS = {
   ENDED: 'ended',
   TIMEUPDATE: 'timeupdate',
   PROGRESS: 'progress',
-  ERROR: 'error'
+  SEEKED: 'seeked',
+  ERROR: 'error',
+  FULLSCREEN_CHANGE: 'fullscreenChange',
+  PIP_CHANGE: 'pipChange',
+  PLAYBACK_RATE_CHANGE: 'playbackRateChange',
+  AUDIO_CHANGE: 'audioChange',
+  QUALITY_CHANGE: 'qualityChange'
 };
 
 playerjs.EVENTS.all = function(){

@@ -243,6 +243,21 @@ fires when the video is paused.
 `ended`
 fires when the video is finished.
 
+`fullscreenChange`
+fires when the video fullscreen is changed
+
+`pipChange`
+fires when the video is put to or brought back from picture-in-picture.
+
+`playbackRateChange`
+fires when the video playback rate is changed by user.
+
+`audioChange`
+fires when the audio track of video is changed.
+
+`qualityChange`
+fires when the video quality is changed.
+
 `seeked`
 fires when the video has been seeked by the user.
 
