@@ -26,7 +26,7 @@ playerjs.EVENTS = {
   PLAYBACK_RATE_CHANGE: 'playbackRateChange',
   AUDIO_CHANGE: 'audioChange',
   QUALITY_CHANGE: 'qualityChange',
-  VOLUME_CHANGE: 'volumeChange',
+  VOLUME_CHANGE: 'volumeChange'
 };
 
 playerjs.EVENTS.all = function(){
