@@ -99,6 +99,10 @@ playerjs.VideoJSAdapter.prototype.init = function(player){
   receiver.on('setLoop', function(value){
     player.loop(value);
   });
+
+  receiver.on('setPlaybackRate', function(value){
+    player.playbackRate(value);
+  });
 };
 
 /* Call when the video.js is ready */

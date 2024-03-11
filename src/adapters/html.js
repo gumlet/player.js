@@ -92,6 +92,10 @@ playerjs.HTML5Adapter.prototype.init = function(video){
   receiver.on('setLoop', function(value){
     video.loop = value;
   });
+
+  receiver.on('setPlaybackRate', function(value){
+    video.playbackRate = value;
+  });
 };
 
 /* Call when the video has loaded */

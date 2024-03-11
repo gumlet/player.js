@@ -95,6 +95,10 @@ playerjs.MockAdapter.prototype.init = function(){
   receiver.on('setLoop', function(value){
     video.loop = value;
   });
+
+  receiver.on('setPlaybackRate', function(value){
+    video.speed = value;
+  });
 };
 
 /* Call when the video has loaded */
