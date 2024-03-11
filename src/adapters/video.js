@@ -103,6 +103,10 @@ playerjs.VideoJSAdapter.prototype.init = function(player){
   receiver.on('setPlaybackRate', function(value){
     player.playbackRate(value);
   });
+
+  receiver.on('getPlaybackRate', function(callback){
+    callback(player.playbackRate());
+  });
 };
 
 /* Call when the video.js is ready */

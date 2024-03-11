@@ -97,7 +97,11 @@ playerjs.MockAdapter.prototype.init = function(){
   });
 
   receiver.on('setPlaybackRate', function(value){
-    video.speed = value;
+    video.playbackRate = value;
+  });
+
+  receiver.on('getPlaybackRate', function(callback){
+    callback(video.playbackRate);
   });
 };
 

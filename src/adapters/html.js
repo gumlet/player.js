@@ -96,6 +96,10 @@ playerjs.HTML5Adapter.prototype.init = function(video){
   receiver.on('setPlaybackRate', function(value){
     video.playbackRate = value;
   });
+
+  receiver.on('getPlaybackRate', function(callback){
+    callback(video.playbackRate);
+  });
 };
 
 /* Call when the video has loaded */

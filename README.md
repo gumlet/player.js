@@ -184,6 +184,13 @@ Set the playback rate which are available in the player. Doesn't returns an erro
 player.setPlaybackRate(0.5);
 ```
 
+`getPlaybackRate`: number
+Get the current playback rate of the player:
+
+```js
+player.getPlaybackRate(value => console.log('getPlaybackRate:', value));
+```
+
 `off`: void
 Remove an event listener. If the listener is specified it should remove
 only that listener, otherwise remove all listeners:

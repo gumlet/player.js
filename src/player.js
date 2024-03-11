@@ -54,6 +54,7 @@ playerjs.METHODS = {
   SETLOOP: 'setLoop',
   GETLOOP: 'getLoop',
   SETPLAYBACKRATE: 'setPlaybackRate',
+  GETPLAYBACKRATE: 'getPlaybackRate',
   REMOVEEVENTLISTENER: 'removeEventListener',
   ADDEVENTLISTENER: 'addEventListener'
 };

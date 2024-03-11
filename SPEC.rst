@@ -262,6 +262,29 @@ Methods
       method: 'getLoop',
     }
 
+``setPlaybackRate``: number
+  Set the playback rate. Value should be in the available playback rates. This function won't return an error if the value is not present.::
+
+    {
+      method: 'setPlaybackRate',
+      value: 1.5
+    }
+
+``getPlaybackRate``: number
+  Get the current playback rate of the player.::
+
+    {
+      method: 'getPlaybackRate',
+    }
+
+``setCurrentTime``: number
+  Perform a seek to a particular time in seconds::
+
+    {
+      method: 'setCurrentTime',
+      value: 12
+    }
+
 
 ``removeEventListener``: void
   Remove an event listener. If the listener is specified it should remove only
@@ -378,6 +401,18 @@ Events that can be listened to.
       context: 'player.js',
       version: 'version',
       event: 'pause',
+    }
+
+``volumeChange``
+  Fires when the volume of the player is changed by the user::
+
+    {
+      context: 'player.js',
+      version: 'version',
+      event: 'pause',
+      value: {
+        volume: 50
+      }
     }
 
 ``ended``
