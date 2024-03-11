@@ -177,6 +177,13 @@ Get the current time in seconds of the video:
 player.getCurrentTime(value => console.log('getCurrentTime:', value));
 ```
 
+`setPlaybackRate`: number
+Set the playback rate which are available in the player. Doesn't returns an error if the passed playback rate is not available. 
+
+```js
+player.setPlaybackRate(0.5);
+```
+
 `off`: void
 Remove an event listener. If the listener is specified it should remove
 only that listener, otherwise remove all listeners:
@@ -269,6 +276,9 @@ fires when the audio track of video is changed.
 
 `qualityChange`
 fires when the video quality is changed.
+
+`volumeChange`
+fires when the volume level of the player is changed. It also gets fired when the player is muted or unmuted, along with muted and unmuted events respectively.
 
 ```js
 {

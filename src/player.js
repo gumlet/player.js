@@ -25,7 +25,8 @@ playerjs.EVENTS = {
   PIP_CHANGE: 'pipChange',
   PLAYBACK_RATE_CHANGE: 'playbackRateChange',
   AUDIO_CHANGE: 'audioChange',
-  QUALITY_CHANGE: 'qualityChange'
+  QUALITY_CHANGE: 'qualityChange',
+  VOLUME_CHANGE: 'volumeChange',
 };
 
 playerjs.EVENTS.all = function(){
@@ -52,6 +53,7 @@ playerjs.METHODS = {
   GETCURRENTTIME:'getCurrentTime',
   SETLOOP: 'setLoop',
   GETLOOP: 'getLoop',
+  SETPLAYBACKRATE: 'setPlaybackRate',
   REMOVEEVENTLISTENER: 'removeEventListener',
   ADDEVENTLISTENER: 'addEventListener'
 };
