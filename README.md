@@ -28,7 +28,7 @@ Install
 Player.js is hosted on JSDelivr's CDN. :
 
 ```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@gumlet/player.js@1.0/dist/player.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@gumlet/player.js@2.0/dist/player.min.js"></script>
 ```
 
 install via npm :
