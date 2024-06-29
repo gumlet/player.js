@@ -10,10 +10,10 @@
    <source src="https://gumlet.sgp1.digitaloceanspaces.com/unittest_videos/playerjs-demo.mp4" type='video/mp4' />
   </video>
   <script src="//vjs.zencdn.net/4.2/video.js"></script>
-  <script src="/dist/player.js"></script>
+  <script src="/dist/player.min.js"></script>
   <script>
     videojs("video", {}, function(){
-      var adapter = playerjs.VideoJSAdapter(this);
+      var adapter = new playerjs.VideoJSAdapter(this);
 
       adapter.ready();
     });

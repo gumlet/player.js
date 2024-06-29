@@ -92,7 +92,7 @@ core.assert = function(test, msg) {
   }
 }
 
-core.generateUUID() = function() {
+core.generateUUID = function() {
   if(crypto && crypto.randomUUID) {
     return crypto.randomUUID();
   } else {

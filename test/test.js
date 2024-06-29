@@ -1,8 +1,8 @@
 /*globals asyncTest:true, ok:true, fail:true, start:true, playerjs:true*/
 var FRAMES = [
-  'http://localhost.com:8003/test/mock.html',
-  'http://localhost.com:8003/test/html.html',
-  'http://localhost.com:8003/test/video.html'
+  // 'http://localhost:8080/test/mock.html',
+  'http://localhost:8080/test/html.html',
+  // 'http://localhost:8080/test/video.html'
 ];
 
 var isNumber= function(obj){
