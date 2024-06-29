@@ -1,3 +1,4 @@
+import core from "./core"
 import Player from "./player"
 import Receiver from "./receiver"
 import MockAdapter from "./adapters/mock"
@@ -9,7 +10,11 @@ const playerjs = {
     Receiver,
     MockAdapter,
     VideoJSAdapter,
-    HTML5Adapter
+    HTML5Adapter,
+    CONTEXT: core.CONTEXT,
+    VERSION: core.VERSION,
+    METHODS: core.METHODS,
+    addEvent: core.addEvent
 }
 
 if (typeof define === 'function' && define.amd) {

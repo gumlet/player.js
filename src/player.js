@@ -7,10 +7,12 @@
 import core from './core';
 import Keeper from './keeper';
 
+let READIED = [];
+
 class Player {
-  constructor(elem, options) {  
-    this.READIED = [];
+  constructor(elem) {  
     var self = this;
+    this.READIED = READIED;
 
     if (core.isString(elem)){
       elem = document.getElementById(elem);
@@ -48,7 +50,7 @@ class Player {
     }
 
     // See if we caught the src event first, otherwise assume we haven't loaded
-    if (this.READIED.includes(elem.src)){
+    if (READIED.includes(elem.src)){
       self.loaded = true;
     } else {
       // Try the onload event, just lets us give another test.
@@ -192,7 +194,7 @@ class Player {
 
   // Based on what ready passed back, we can determine if the events/method are
   // supported by the player. 
-  supports = function(evtOrMethod, names){
+  supports(evtOrMethod, names){
 
     core.assert(['method', 'event'].includes(evtOrMethod),
       'evtOrMethod needs to be either "event" or "method" got ' + evtOrMethod);
@@ -225,12 +227,12 @@ function createPrototypeFunction(name) {
 
     //for getters add the passed parameters to the arguments for the send call
     if (/^get/.test(name)) {
-      playerjs.assert(args.length > 0, 'Get methods require a callback.');
+      core.assert(args.length > 0, 'Get methods require a callback.');
       args.unshift(data);
     } else {
       //for setter add the first arg to the value field
       if (/^set/.test(name)) {
-        playerjs.assert(args.length !== 0, 'Set methods require a value.');
+        core.assert(args.length !== 0, 'Set methods require a value.');
         data.value = args[0];
       }
       args = [data];
@@ -246,5 +248,24 @@ for (let methodName of core.METHODS.all()) {
     Player.prototype[methodName] = createPrototypeFunction(methodName);
   }
 }
+
+core.addEvent(window, 'message', function(e){
+  var data;
+  try {
+    data = JSON.parse(e.data);
+  } catch (err){
+    return false;
+  }
+
+  // abort if this message wasn't a player.js message
+  if (data.context !== core.CONTEXT) {
+    return false;
+  }
+
+  // We need to determine if we are ready.
+  if (data.event === 'ready' && data.value && data.value.src){
+    READIED.push(data.value.src);
+  }
+})
 
 export default Player;
