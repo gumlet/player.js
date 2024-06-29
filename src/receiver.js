@@ -69,7 +69,7 @@ class Receiver {
     }
 
     // make sure the context is correct.
-    if (data.context !== playerjs.CONTEXT) {
+    if (data.context !== core.CONTEXT) {
       return false;
     }
 

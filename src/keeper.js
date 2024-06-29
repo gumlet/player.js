@@ -14,7 +14,7 @@ class Keeper {
       return false;
     }
   
-    if (playerjs.isNone(id)){
+    if (core.isNone(id)){
       return true;
     }
   
@@ -59,7 +59,7 @@ class Keeper {
   
       // There are omni events, in that they do not have an id. i.e "ready".
       // Or there is an ID and we only want to execute the right id'd method.
-      if (playerjs.isNone(id) || (!playerjs.isNone(id) && d.id === id )){
+      if (core.isNone(id) || (!core.isNone(id) && d.id === id )){
   
         execute.push({
           cb: d.cb,
@@ -112,9 +112,9 @@ class Keeper {
     for (var i=0; i< this.data[event].length; i++){
       var data = this.data[event][i];
       // If we only keep if there was a CB and the CB is there.
-      if (!playerjs.isNone(cb) && data.cb !== cb) {
+      if (!core.isNone(cb) && data.cb !== cb) {
         keep.push(data);
-      } else if (!playerjs.isNone(data.id)) {
+      } else if (!core.isNone(data.id)) {
         listeners.push(data.id);
       }
     }

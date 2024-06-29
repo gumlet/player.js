@@ -53,9 +53,9 @@ const core = {
 
 core.METHODS.all = function(){
   var all = [];
-  for (var key in playerjs.METHODS) {
-    if (core.has(playerjs.METHODS, key) && core.isString(playerjs.METHODS[key])) {
-      all.push(playerjs.METHODS[key]);
+  for (var key in core.METHODS) {
+    if (core.has(core.METHODS, key) && core.isString(core.METHODS[key])) {
+      all.push(core.METHODS[key]);
     }
   }
   return all;
@@ -63,9 +63,9 @@ core.METHODS.all = function(){
 
 core.EVENTS.all = function(){
   var all = [];
-  for (var key in playerjs.EVENTS) {
-    if (core.has(playerjs.EVENTS, key) && core.isString(playerjs.EVENTS[key])) {
-      all.push(playerjs.EVENTS[key]);
+  for (var key in core.EVENTS) {
+    if (core.has(core.EVENTS, key) && core.isString(core.EVENTS[key])) {
+      all.push(core.EVENTS[key]);
     }
   }
   return all;
