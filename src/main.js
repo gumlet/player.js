@@ -2,11 +2,6 @@ const playerjs = {
     
 }
 
-playerjs.DEBUG = false;
-playerjs.VERSION = '0.0.11';
-playerjs.CONTEXT = 'player.js';
-playerjs.POST_MESSAGE = !!window.postMessage;
-
 playerjs.origin = function(url){
     // Grab the origin of a URL
     if (url.substr(0, 2) === '//'){
@@ -28,10 +23,6 @@ playerjs.origin = function(url){
   
   playerjs.isArray = function(obj){
     return Object.prototype.toString.call(obj) === "[object Array]";
-  };
-  
-  playerjs.isNone = function(obj){
-    return (obj === null || obj === undefined);
   };
   
   playerjs.has = function(obj, key){

@@ -50,7 +50,7 @@ class Receiver {
     }
 
     // Browsers that support postMessage also support JSON.
-    var data = {};
+    let data = {};
     if (typeof e.data === "object") {
       data = e.data;
     } else {
@@ -74,7 +74,7 @@ class Receiver {
     }
 
     // Make sure we have a valid method.
-    if (!playerjs.METHODS.all().includes(data.method)) {
+    if (!core.METHODS.all().includes(data.method)) {
       this.emit('error', {
         code: 2,
         msg: 'Invalid Method "' + data.method + '"'
@@ -83,13 +83,13 @@ class Receiver {
     }
 
     // See if we added a listener
-    var listener = !playerjs.isNone(data.listener) ? data.listener : null;
+    let listener = !core.isNone(data.listener) ? data.listener : null;
 
     // Add Event Listener.
     if (data.method === 'addEventListener') {
       if (this.eventListeners.hasOwnProperty(data.value)) {
         //If the listener is the same, i.e. null only add it once.
-        if (playerjs.indexOf(this.eventListeners[data.value], listener) === -1) {
+        if(!this.eventListeners[data.value].includes(listener)) {
           this.eventListeners[data.value].push(listener);
         }
       } else {
@@ -103,7 +103,7 @@ class Receiver {
     // Remove the event listener.
     else if (data.method === 'removeEventListener') {
       if (this.eventListeners.hasOwnProperty(data.value)) {
-        var index = playerjs.indexOf(this.eventListeners[data.value], listener);
+        let index = this.eventListeners[data.value].indexOf(listener);
 
         // if we find the element, remove it.
         if (index > -1) {
@@ -151,25 +151,25 @@ class Receiver {
 
   send(event, value, listener) {
 
-    playerjs.log('Receiver.send', event, value, listener);
+    console.debug('Receiver.send', event, value, listener);
 
     if (this.reject) {
       // We are not in a frame, or we don't support POST_MESSAGE
-      playerjs.log('Receiver.send.reject', event, value, listener);
+      console.error('Receiver.send.reject', event, value, listener);
       return false;
     }
 
     var data = {
-      context: playerjs.CONTEXT,
-      version: playerjs.VERSION,
+      context: core.CONTEXT,
+      version: core.VERSION,
       event: event
     };
 
-    if (!playerjs.isNone(value)) {
+    if (!core.isNone(value)) {
       data.value = value;
     }
 
-    if (!playerjs.isNone(listener)) {
+    if (!core.isNone(listener)) {
       data.listener = listener;
     }
 
@@ -183,7 +183,7 @@ class Receiver {
       return false;
     }
 
-    playerjs.log('Instance.emit', event, value, this.eventListeners[event]);
+    console.debug('Instance.emit', event, value, this.eventListeners[event]);
 
     for (var i = 0; i < this.eventListeners[event].length; i++) {
       var listener = this.eventListeners[event][i];
@@ -194,7 +194,7 @@ class Receiver {
   }
 
   ready() {
-    playerjs.log('Receiver.ready');
+    console.debug('Receiver.ready');
     this.isReady = true;
 
     var data = {

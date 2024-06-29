@@ -36,7 +36,11 @@ const core = {
     GETPLAYBACKRATE: 'getPlaybackRate',
     REMOVEEVENTLISTENER: 'removeEventListener',
     ADDEVENTLISTENER: 'addEventListener'
-  }
+  },
+
+  DEBUG : false,
+  VERSION :'0.0.11',
+  CONTEXT : 'player.js',
 };
 
 core.METHODS.all = function(){
@@ -70,12 +74,8 @@ core.addEvent = function(elem, type, eventHandle) {
   }
 };
 
-core.log = function(){
-  playerjs.log.history = playerjs.log.history || [];   // store logs to an array for reference
-  playerjs.log.history.push(arguments);
-  if(window.console && playerjs.DEBUG){
-    window.console.log( Array.prototype.slice.call(arguments) );
-  }
+core.isNone = function(obj){
+  return (obj === null || obj === undefined);
 };
 
 export default core;
