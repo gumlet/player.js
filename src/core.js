@@ -41,12 +41,20 @@ const core = {
   DEBUG : false,
   VERSION :'0.0.11',
   CONTEXT : 'player.js',
+
+  isString : function (obj) {
+    return Object.prototype.toString.call(obj) === '[object String]';
+  },
+
+  has: function(obj, key){
+    return Object.prototype.hasOwnProperty.call(obj, key);
+  }
 };
 
 core.METHODS.all = function(){
   var all = [];
   for (var key in playerjs.METHODS) {
-    if (playerjs.has(playerjs.METHODS, key) && playerjs.isString(playerjs.METHODS[key])) {
+    if (core.has(playerjs.METHODS, key) && core.isString(playerjs.METHODS[key])) {
       all.push(playerjs.METHODS[key]);
     }
   }
@@ -56,7 +64,7 @@ core.METHODS.all = function(){
 core.EVENTS.all = function(){
   var all = [];
   for (var key in playerjs.EVENTS) {
-    if (playerjs.has(playerjs.EVENTS, key) && playerjs.isString(playerjs.EVENTS[key])) {
+    if (core.has(playerjs.EVENTS, key) && core.isString(playerjs.EVENTS[key])) {
       all.push(playerjs.EVENTS[key]);
     }
   }
@@ -76,6 +84,25 @@ core.addEvent = function(elem, type, eventHandle) {
 
 core.isNone = function(obj){
   return (obj === null || obj === undefined);
+};
+
+core.assert = function(test, msg) {
+  if (!test) {
+    throw msg || "Player.js Assert Failed";
+  }
+}
+
+core.generateUUID() = function() {
+  if(crypto && crypto.randomUUID) {
+    return crypto.randomUUID();
+  } else {
+    const url = URL.createObjectURL(new Blob())
+    return url.substring(url.lastIndexOf('/') + 1)
+  }
+}
+
+core.isArray = function(obj){
+  return Object.prototype.toString.call(obj) === "[object Array]";
 };
 
 export default core;
