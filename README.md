@@ -34,7 +34,7 @@ Player.js is hosted on JSDelivr's CDN. :
 install via npm :
 
 ```sh
-npm install player.js
+npm install @gumlet/player.js
 ```
 
 Ready
