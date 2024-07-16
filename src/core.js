@@ -39,7 +39,7 @@ const core = {
   },
 
   DEBUG : false,
-  VERSION :'0.0.11',
+  VERSION :'2.0',
   CONTEXT : 'player.js',
 
   isString : function (obj) {

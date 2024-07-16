@@ -32,8 +32,8 @@ function testCases(hooks){
 
     iframe.src = FRAMES[frameIndex];
     iframe.id = 'iframe_'+frameIndex;
-    iframe.width = 200;
-    iframe.height = 200;
+    iframe.width = 400;
+    iframe.height = 400;
     frameIndex++;
   
     document.body.appendChild(iframe);

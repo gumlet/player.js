@@ -89,7 +89,7 @@ following message to the parent.
 
   {
     context: 'player.js',
-    version: '0.0.11',
+    version: '2.0',
     event: 'methodName',
     listener: 'listenerName',
     value: 'returnValue'
