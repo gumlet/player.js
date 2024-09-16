@@ -5,7 +5,7 @@ import MockAdapter from "./adapters/mock"
 import VideoJSAdapter from "./adapters/video"
 import HTML5Adapter from "./adapters/html"
 
-const playerjs = {
+export const playerjs = {
     Player,
     Receiver,
     MockAdapter,
