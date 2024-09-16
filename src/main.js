@@ -5,7 +5,7 @@ import MockAdapter from "./adapters/mock"
 import VideoJSAdapter from "./adapters/video"
 import HTML5Adapter from "./adapters/html"
 
-export const playerjs = {
+const playerjs = {
     Player,
     Receiver,
     MockAdapter,
@@ -24,3 +24,5 @@ if (typeof define === 'function' && define.amd) {
 } else {
   window.playerjs = playerjs;
 }
+
+export default playerjs;
