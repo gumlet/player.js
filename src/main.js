@@ -5,7 +5,7 @@ import MockAdapter from "./adapters/mock";
 import VideoJSAdapter from "./adapters/video";
 import HTML5Adapter from "./adapters/html";
 
-export const playerjs = {
+const playerjs = {
   Player,
   Receiver,
   MockAdapter,
@@ -21,3 +21,5 @@ export const playerjs = {
 if (typeof window !== "undefined") {
   window.playerjs = playerjs;
 }
+
+export default playerjs;
