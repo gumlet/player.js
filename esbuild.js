@@ -8,4 +8,5 @@ await esbuild.build({
   target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
   outfile: 'dist/player.min.js',
   treeShaking: false,
+  format: "esm"
 })
