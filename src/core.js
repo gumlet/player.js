@@ -16,7 +16,7 @@ const core = {
     VOLUME_CHANGE: 'volumeChange'
   },
 
-  POST_MESSAGE : !!window.postMessage,
+  POST_MESSAGE: !!window.postMessage,
 
   METHODS: {
     PLAY: 'play',
@@ -29,7 +29,7 @@ const core = {
     GETVOLUME: 'getVolume',
     GETDURATION: 'getDuration',
     SETCURRENTTIME: 'setCurrentTime',
-    GETCURRENTTIME:'getCurrentTime',
+    GETCURRENTTIME: 'getCurrentTime',
     SETLOOP: 'setLoop',
     GETLOOP: 'getLoop',
     SETPLAYBACKRATE: 'setPlaybackRate',
@@ -38,71 +38,71 @@ const core = {
     ADDEVENTLISTENER: 'addEventListener'
   },
 
-  DEBUG : false,
-  VERSION :'2.0',
-  CONTEXT : 'player.js',
+  DEBUG: false,
+  VERSION: '2.0',
+  CONTEXT: 'player.js',
 
-  isString : function (obj) {
-    return Object.prototype.toString.call(obj) === '[object String]';
+  isString: function (obj) {
+    return Object.prototype.toString.call(obj) === '[object String]'
   },
 
-  has: function(obj, key){
-    return Object.prototype.hasOwnProperty.call(obj, key);
-  }
-};
-
-core.METHODS.all = function(){
-  var all = [];
-  for (var key in core.METHODS) {
-    if (core.has(core.METHODS, key) && core.isString(core.METHODS[key])) {
-      all.push(core.METHODS[key]);
-    }
-  }
-  return all;
-};
-
-core.EVENTS.all = function(){
-  var all = [];
-  for (var key in core.EVENTS) {
-    if (core.has(core.EVENTS, key) && core.isString(core.EVENTS[key])) {
-      all.push(core.EVENTS[key]);
-    }
-  }
-  return all;
-};
-
-core.addEvent = function(elem, type, eventHandle) {
-  if (!elem) { return; }
-  if ( elem.addEventListener ) {
-    elem.addEventListener( type, eventHandle, false );
-  } else if ( elem.attachEvent ) {
-    elem.attachEvent( "on" + type, eventHandle );
-  } else {
-    elem["on"+type]=eventHandle;
-  }
-};
-
-core.isNone = function(obj){
-  return (obj === null || obj === undefined);
-};
-
-core.assert = function(test, msg) {
-  if (!test) {
-    throw msg || "Player.js Assert Failed";
+  has: function (obj, key) {
+    return Object.prototype.hasOwnProperty.call(obj, key)
   }
 }
 
-core.generateUUID = function() {
-  if(crypto && crypto.randomUUID) {
-    return crypto.randomUUID();
+core.METHODS.all = function () {
+  const all = []
+  for (const key in core.METHODS) {
+    if (core.has(core.METHODS, key) && core.isString(core.METHODS[key])) {
+      all.push(core.METHODS[key])
+    }
+  }
+  return all
+}
+
+core.EVENTS.all = function () {
+  const all = []
+  for (const key in core.EVENTS) {
+    if (core.has(core.EVENTS, key) && core.isString(core.EVENTS[key])) {
+      all.push(core.EVENTS[key])
+    }
+  }
+  return all
+}
+
+core.addEvent = function (elem, type, eventHandle) {
+  if (!elem) { return }
+  if (elem.addEventListener) {
+    elem.addEventListener(type, eventHandle, false)
+  } else if (elem.attachEvent) {
+    elem.attachEvent('on' + type, eventHandle)
+  } else {
+    elem['on' + type] = eventHandle
+  }
+}
+
+core.isNone = function (obj) {
+  return (obj === null || obj === undefined)
+}
+
+core.assert = function (test, msg) {
+  if (!test) {
+    throw msg || 'Player.js Assert Failed'
+  }
+}
+
+core.generateUUID = function () {
+  if (crypto && crypto.randomUUID) {
+    return crypto.randomUUID()
   } else {
     const url = URL.createObjectURL(new Blob())
     return url.substring(url.lastIndexOf('/') + 1)
   }
 }
 
-core.isArray = function(obj){
-  return Object.prototype.toString.call(obj) === "[object Array]";
-};
+core.isArray = function (obj) {
+  return Object.prototype.toString.call(obj) === '[object Array]'
+}
 
-export default core;
+export default core
