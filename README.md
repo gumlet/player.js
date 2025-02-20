@@ -1,6 +1,11 @@
 Player.js
 =========
 
+[![](https://data.jsdelivr.com/v1/package/npm/@gumlet/player.js/badge)](https://www.jsdelivr.com/package/npm/@gumlet/player.js)
+[![](https://img.shields.io/npm/v/@gumlet/player.js.svg
+)](https://www.npmjs.com/package/@gumlet/player.js)
+
+
 A JavaScript library for interacting with iframes that support Player.js
 spec.
 
