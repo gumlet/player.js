@@ -22,4 +22,4 @@ if (typeof window !== 'undefined') {
   window.playerjs = playerjs
 }
 
-export default playerjs
+export default {playerjs: playerjs}
