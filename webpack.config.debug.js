@@ -1,16 +1,16 @@
-const path = require('path');
-const webpack = require('webpack');
-const packageProperties = require('./package.json');
+const path = require('path')
+const webpack = require('webpack')
+const packageProperties = require('./package.json')
 
-const {banner, entry, externals, rules} = require('./webpack.config.js');
+const { banner, entry, externals, rules } = require('./webpack.config.js')
 
 module.exports = {
   mode: 'development',
   devServer: {
     static: {
-      directory: path.join(__dirname),
+      directory: path.join(__dirname)
     },
-    port:8080,
+    port: 8080
   },
   entry,
   externals,
@@ -19,7 +19,7 @@ module.exports = {
     // for dev-server
     publicPath: './dist/debug',
     filename: 'player.min.js',
-    libraryTarget: 'umd',
+    libraryTarget: 'umd'
   },
   module: {
     rules
@@ -31,4 +31,4 @@ module.exports = {
     })
   ],
   devtool: 'inline-source-map'
-};
+}

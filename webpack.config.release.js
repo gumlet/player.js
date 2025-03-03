@@ -1,10 +1,10 @@
-const WriteJsonPlugin = require('generate-json-webpack-plugin');
-const TerserPlugin = require("terser-webpack-plugin");
-const webpack = require('webpack');
-const path = require('path');
-const packageProperties = require('./package.json');
+const WriteJsonPlugin = require('generate-json-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const webpack = require('webpack')
+const path = require('path')
+const packageProperties = require('./package.json')
 
-const {banner, entry, externals, rules} = require('./webpack.config.js');
+const { banner, entry, externals, rules } = require('./webpack.config.js')
 
 const releasePackageJson = {
   name: packageProperties.name,
@@ -21,13 +21,13 @@ const releasePackageJson = {
   author: 'Gumlet Pte. Ltd.',
   homepage: 'https://github.com/gumlet/player.js/blob/main/README.md',
   bugs: {
-    url: "https://www.gumlet.com/contact/"
+    url: 'https://www.gumlet.com/contact/'
   },
   maintainers: [{
     name: 'Gumlet Team',
     email: 'support@gumlet.com'
   }]
-};
+}
 
 module.exports = {
   mode: 'production',
@@ -43,7 +43,7 @@ module.exports = {
   },
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin()],
+    minimizer: [new TerserPlugin()]
   },
   plugins: [
     // new webpack.optimize.UglifyJsPlugin({
@@ -55,10 +55,10 @@ module.exports = {
     //   }
     // }),
     new webpack.BannerPlugin(banner),
-    new WriteJsonPlugin("package.json",releasePackageJson),
+    new WriteJsonPlugin('package.json', releasePackageJson),
     new webpack.DefinePlugin({
       // __VERSION__: JSON.stringify(getGitVersion())
       __VERSION__: JSON.stringify(releasePackageJson.version)
     })
   ]
-};
+}
