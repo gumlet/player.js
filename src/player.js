@@ -9,7 +9,7 @@ import Keeper from './keeper'
 const READIED = []
 
 class Player {
-  constructor (elem) {
+  constructor (elem, debug = false) {
     const self = this
     this.READIED = READIED
 
@@ -18,6 +18,8 @@ class Player {
     }
 
     this.elem = elem
+
+    this.debug = debug
 
     // make sure we have an iframe
     core.assert(elem.nodeName === 'IFRAME',
@@ -77,12 +79,16 @@ class Player {
     }
 
     if (!this.isReady && data.value !== 'ready') {
-      console.debug('Player.queue', data)
+      if (this.debug) {
+        console.debug('Player.queue', data)
+      }
       this.queue.push(data)
       return false
     }
 
-    console.debug('Player.send', data, this.origin)
+    if (this.debug) {
+      console.debug('Player.send', data, this.origin)
+    }
 
     if (this.loaded === true) {
       this.elem.contentWindow.postMessage(JSON.stringify(data), this.origin)
@@ -92,7 +98,9 @@ class Player {
   }
 
   receive (e) {
-    console.debug('Player.receive', e)
+    if (this.debug) {
+      console.debug('Player.receive', e)
+    }
 
     if (e.origin !== this.origin) {
       return false
@@ -142,7 +150,9 @@ class Player {
     for (let i = 0; i < this.queue.length; i++) {
       const obj = this.queue[i]
 
-      console.debug('Player.dequeue', obj)
+      if (this.debug) {
+        console.debug('Player.dequeue', obj)
+      }
 
       if (data.event === 'ready') {
         this.keeper.execute(obj.event, obj.listener, true, this)
@@ -173,7 +183,9 @@ class Player {
 
   off (event, callback) {
     const listeners = this.keeper.off(event, callback)
-    console.debug('Player.off', listeners)
+    if (this.debug) {
+      console.debug('Player.off', listeners)
+    }
 
     if (listeners.length > 0) {
       for (const i in listeners) {
