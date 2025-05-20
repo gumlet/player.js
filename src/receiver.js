@@ -123,7 +123,7 @@ class Receiver {
     if (!Object.hasOwn(this.methods, method)) {
       this.emit('error', {
         code: 3,
-        msg: 'Method Not Supported"' + method + '"'
+        msg: 'Method Not Supported "' + method + '"'
       })
       return false
     }
