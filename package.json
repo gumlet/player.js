@@ -11,7 +11,8 @@
     "url": "git://github.com/gumlet/player.js.git"
   },
   "author": {
-    "name": "Gumlet"
+    "name": "Gumlet",
+    "url": "https://www.gumlet.com/"
   },
   "scripts": {
     "build:debug": "webpack --progress --config webpack.config.debug.js",
