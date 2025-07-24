@@ -1,5 +1,4 @@
 // Core type definitions for Player.js
-
 export interface PlayerEvents {
   READY: 'ready'
   PLAY: 'play'

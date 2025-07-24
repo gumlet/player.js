@@ -3,7 +3,6 @@ const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
 const packageProperties = require('./package.json')
-
 const { banner, entry, externals, rules, resolve } = require('./webpack.config.js')
 
 const releasePackageJson = {
