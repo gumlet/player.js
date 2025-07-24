@@ -29,7 +29,7 @@
   "browserslist": "defaults",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "esbuild": "^0.25.0",
     "generate-json-webpack-plugin": "^2.0.0",
     "ts-loader": "^9.0.0",
