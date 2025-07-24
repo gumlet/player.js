@@ -35,7 +35,7 @@ Install
 Player.js is hosted on JSDelivr's CDN. :
 
 ```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@gumlet/player.js@2.0/dist/player.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@gumlet/player.js@3.0/dist/player.min.js"></script>
 ```
 
 install via npm :
@@ -47,7 +47,7 @@ npm install @gumlet/player.js
 TypeScript Support
 ------------------
 
-Player.js v2.0.16+ includes full TypeScript support with type definitions included. The library is written in TypeScript and provides comprehensive type safety:
+Player.js v3.0.0+ includes full TypeScript support with type definitions included. The library is written in TypeScript and provides comprehensive type safety:
 
 ```typescript
 import playerjs from '@gumlet/player.js';
