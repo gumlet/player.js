@@ -281,92 +281,226 @@ player.supports('method', ['play', 'pause']);
 Events
 ------
 
-Events that can be listened to.
+Player.js provides comprehensive event handling to monitor playback state and user interactions. All events can be listened to using the `on()` method.
 
-`ready`
-fired when the media is ready to receive commands. This is fired
-regardless of listening to the event. Note: As outlined in the PlayerJs
-Spec, you may run into inconsistencies if you have multiple players on
-the page with the same `src`. To get around this, simply append a UUID
-or a timestamp to the iframe's src to guarantee that all players on the
-page have a unique `src`.
+### Core Events
 
-`progress`
-fires when the media is loading additional media for playback:
+#### `ready`
+Fired when the media is ready to receive commands. Always wait for this event before calling player methods.
 
 ```js
-{
-  percent: 0.8,
+player.on('ready', async () => {
+  console.log('Player is ready!');
+  // Safe to call player methods now
+  await player.play();
+});
+```
+
+**Note:** As outlined in the PlayerJs Spec, you may run into inconsistencies if you have multiple players on the page with the same `src`. To avoid this, append a UUID or timestamp to the iframe's src.
+
+#### `play`
+Fired when playback starts.
+
+```js
+player.on('play', () => {
+  console.log('Video started playing');
+});
+```
+
+#### `pause`
+Fired when playback is paused.
+
+```js
+player.on('pause', () => {
+  console.log('Video paused');
+});
+```
+
+#### `ended`
+Fired when playback reaches the end of the media.
+
+```js
+player.on('ended', async () => {
+  console.log('Video finished');
+  // Reset to beginning if needed
+  await player.setCurrentTime(0);
+});
+```
+
+### Progress Events
+
+#### `timeupdate`
+Fired regularly during playback with current time information.
+
+```js
+player.on('timeupdate', (data) => {
+  const { seconds, duration } = data;
+  const progress = (seconds / duration) * 100;
+  
+  console.log(`Progress: ${progress.toFixed(1)}%`);
+  console.log(`Current time: ${formatTime(seconds)} / ${formatTime(duration)}`);
+});
+
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 ```
 
-`timeupdate`
-fires during playback:
+#### `progress`
+Fired when the media is buffering/loading additional content.
 
 ```js
-{
-  seconds: 10,
-  duration: 40
-}
+player.on('progress', (data) => {
+  const { percent } = data;
+  console.log(`Buffered: ${(percent * 100).toFixed(1)}%`);
+});
 ```
 
-`play`
-fires when the video starts to play.
-
-`pause`
-fires when the video is paused.
-
-`ended`
-fires when the video is finished.
-
-`fullscreenChange`
-fires when the video fullscreen is changed:
+#### `seeked`
+Fired when the user seeks to a different time position.
 
 ```js
-{
-  isFullScreen: true // or false
-}
+player.on('seeked', (data) => {
+  const { seconds, duration } = data;
+  console.log(`Seeked to ${seconds}s of ${duration}s`);
+});
 ```
 
-`pipChange`
-fires when the video is put to or brought back from picture-in-picture.
+### Audio/Video Control Events
+
+#### `volumeChange`
+Fired when the volume level changes, including mute/unmute actions.
 
 ```js
-{
-  isPIP: true // or false
-}
+player.on('volumeChange', async () => {
+  const volume = await player.getVolume();
+  const isMuted = await player.getMuted();
+  
+  console.log(`Volume: ${volume}%, Muted: ${isMuted}`);
+});
 ```
 
-`playbackRateChange`
-fires when the video playback rate is changed by user.
-
-`audioChange`
-fires when the audio track of video is changed.
-
-`qualityChange`
-fires when the video quality is changed.
-
-`volumeChange`
-fires when the volume level of the player is changed. It also gets fired when the player is muted or unmuted, along with muted and unmuted events respectively.
+#### `playbackRateChange`
+Fired when playback speed is changed.
 
 ```js
-{
-  quality: '720p'
-}
+player.on('playbackRateChange', async () => {
+  const rate = await player.getPlaybackRate();
+  console.log(`Playback rate: ${rate}x`);
+});
 ```
 
-`seeked`
-fires when the video has been seeked by the user. Gives seeked to time in seconds and total duration of video.
+### Display Events
+
+#### `fullscreenChange`
+Fired when fullscreen mode is toggled.
 
 ```js
-{
-  seconds: 10
-  duration: 50
-}
+player.on('fullscreenChange', (data) => {
+  const { isFullScreen } = data;
+  console.log(`Fullscreen: ${isFullScreen}`);
+});
 ```
 
-`error`
-fires when an error occurs.
+#### `pipChange`
+Fired when Picture-in-Picture mode is toggled.
+
+```js
+player.on('pipChange', (data) => {
+  const { isPIP } = data;
+  console.log(`Picture-in-Picture: ${isPIP}`);
+});
+```
+
+### Quality Events
+
+#### `qualityChange`
+Fired when video quality/resolution is changed.
+
+```js
+player.on('qualityChange', (data) => {
+  const { quality } = data;
+  console.log(`Quality changed to: ${quality}`);
+});
+```
+
+#### `audioChange`
+Fired when the audio track is changed.
+
+```js
+player.on('audioChange', (data) => {
+  console.log('Audio track changed:', data);
+});
+```
+
+### Error Handling
+
+#### `error`
+Fired when an error occurs during playback.
+
+```js
+player.on('error', (error) => {
+  console.error('Playback error:', error);
+  // Handle error appropriately for your application
+});
+```
+
+### Complete Example
+
+Here's a comprehensive example showing how to listen to multiple events:
+
+```js
+const player = new playerjs.Player('video-iframe');
+
+player.on('ready', async () => {
+  console.log('Player is ready!');
+  
+  // Get initial player state
+  const duration = await player.getDuration();
+  const volume = await player.getVolume();
+  const isPaused = await player.getPaused();
+  
+  console.log(`Duration: ${duration}s, Volume: ${volume}%, Paused: ${isPaused}`);
+});
+
+// Listen to playback events
+player.on('play', () => console.log('Started playing'));
+player.on('pause', () => console.log('Paused'));
+player.on('ended', () => console.log('Playback finished'));
+
+// Listen to progress events
+player.on('timeupdate', (data) => {
+  const { seconds, duration } = data;
+  console.log(`${seconds.toFixed(1)}s / ${duration.toFixed(1)}s`);
+});
+
+// Listen to user interaction events
+player.on('volumeChange', async () => {
+  const volume = await player.getVolume();
+  const muted = await player.getMuted();
+  console.log(`Volume: ${volume}%, Muted: ${muted}`);
+});
+
+player.on('seeked', (data) => {
+  console.log(`Seeked to: ${data.seconds}s`);
+});
+
+// Listen to display events
+player.on('fullscreenChange', (data) => {
+  console.log(`Fullscreen: ${data.isFullScreen}`);
+});
+
+player.on('pipChange', (data) => {
+  console.log(`Picture-in-Picture: ${data.isPIP}`);
+});
+
+// Handle errors
+player.on('error', (error) => {
+  console.error('Player error:', error);
+});
+```
 
 ## Related Documentation
 
