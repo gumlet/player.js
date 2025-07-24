@@ -2,14 +2,17 @@
 * Keeper is just a method for keeping track of all the callbacks.
 */
 import core from './core'
+import { KeeperData, EventCallback } from './types'
 
 class Keeper {
-  constructor () {
+  private data: { [event: string]: KeeperData[] }
+
+  constructor() {
     this.data = {}
   }
 
-  has (event, id) {
-    if (!Object.hasOwn(this.data, event)) {
+  has(event: string, id?: string): boolean {
+    if (!Object.prototype.hasOwnProperty.call(this.data, event)) {
       return false
     }
 
@@ -29,8 +32,8 @@ class Keeper {
     return false
   }
 
-  add (id, event, cb, ctx, one) {
-    const d = {
+  add(id: string, event: string, cb: EventCallback, ctx?: any, one: boolean = false): void {
+    const d: KeeperData = {
       id,
       event,
       cb,
@@ -45,13 +48,13 @@ class Keeper {
     }
   }
 
-  execute (event, id, data, ctx) {
+  execute(event: string, id?: string, data?: any, ctx?: any): boolean {
     if (!this.has(event, id)) {
       return false
     }
 
-    const keep = []
-    const execute = []
+    const keep: KeeperData[] = []
+    const execute: Array<{cb: EventCallback, ctx: any, data: any}> = []
 
     for (let i = 0; i < this.data[event].length; i++) {
       const d = this.data[event][i]
@@ -86,25 +89,27 @@ class Keeper {
       const e = execute[n]
       e.cb.call(e.ctx, e.data)
     }
+
+    return true
   }
 
-  on (id, event, cb, ctx) {
+  on(id: string, event: string, cb: EventCallback, ctx?: any): void {
     this.add(id, event, cb, ctx, false)
   }
 
-  one (id, event, cb, ctx) {
+  one(id: string, event: string, cb: EventCallback, ctx?: any): void {
     this.add(id, event, cb, ctx, true)
   }
 
-  off (event, cb) {
+  off(event: string, cb?: EventCallback): string[] {
     // We should probably restructure so this is a bit less of a pain.
-    const listeners = []
+    const listeners: string[] = []
 
-    if (!Object.hasOwn(this.data, event)) {
+    if (!Object.prototype.hasOwnProperty.call(this.data, event)) {
       return listeners
     }
 
-    const keep = []
+    const keep: KeeperData[] = []
 
     // Loop through everything.
     for (let i = 0; i < this.data[event].length; i++) {

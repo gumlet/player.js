@@ -4,7 +4,7 @@ const webpack = require('webpack')
 const path = require('path')
 const packageProperties = require('./package.json')
 
-const { banner, entry, externals, rules } = require('./webpack.config.js')
+const { banner, entry, externals, rules, resolve } = require('./webpack.config.js')
 
 const releasePackageJson = {
   name: packageProperties.name,
@@ -33,6 +33,7 @@ module.exports = {
   mode: 'production',
   entry,
   externals,
+  resolve,
   output: {
     path: path.resolve('./dist'),
     filename: 'player.min.js',

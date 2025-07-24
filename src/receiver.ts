@@ -8,9 +8,17 @@
 */
 
 import core from './core'
+import { SupportedFeatures, EventCallback, MethodCallback } from './types'
 
 class Receiver {
-  constructor (events, methods) {
+  public isReady: boolean
+  public origin: string
+  public methods: { [method: string]: Function }
+  public supported: SupportedFeatures
+  public eventListeners: { [event: string]: (string | null)[] }
+  public reject: boolean
+
+  constructor(events?: string[], methods?: string[]) {
     const self = this
 
     // Deal with the ready crap.
@@ -36,20 +44,20 @@ class Receiver {
 
     // We aren't in an iframe, don't listen.
     if (!this.reject) {
-      core.addEvent(window, 'message', function (e) {
+      core.addEvent(window, 'message', function (e: MessageEvent) {
         self.receive(e)
       })
     }
   }
 
-  receive (e) {
+  receive(e: MessageEvent): boolean {
     // Only want to listen to events that came from our origin.
     if (e.origin !== this.origin) {
       return false
     }
 
     // Browsers that support postMessage also support JSON.
-    let data = {}
+    let data: any = {}
     if (typeof e.data === 'object') {
       data = e.data
     } else {
@@ -86,7 +94,7 @@ class Receiver {
 
     // Add Event Listener.
     if (data.method === 'addEventListener') {
-      if (Object.hasOwn(this.eventListeners, data.value)) {
+      if (Object.prototype.hasOwnProperty.call(this.eventListeners, data.value)) {
         // If the listener is the same, i.e. null only add it once.
         if (!this.eventListeners[data.value].includes(listener)) {
           this.eventListeners[data.value].push(listener)
@@ -99,7 +107,7 @@ class Receiver {
         this.ready()
       }
     } else if (data.method === 'removeEventListener') { // Remove the event listener.
-      if (Object.hasOwn(this.eventListeners, data.value)) {
+      if (Object.prototype.hasOwnProperty.call(this.eventListeners, data.value)) {
         const index = this.eventListeners[data.value].indexOf(listener)
 
         // if we find the element, remove it.
@@ -114,13 +122,15 @@ class Receiver {
     } else { // Go get it.
       this.get(data.method, data.value, listener)
     }
+
+    return true
   }
 
-  get (method, value, listener) {
+  get(method: string, value: any, listener: string | null): boolean {
     const self = this
 
     // Now lets do it.
-    if (!Object.hasOwn(this.methods, method)) {
+    if (!Object.prototype.hasOwnProperty.call(this.methods, method)) {
       this.emit('error', {
         code: 3,
         msg: 'Method Not Supported "' + method + '"'
@@ -131,20 +141,22 @@ class Receiver {
     const func = this.methods[method]
 
     if (method.substr(0, 3) === 'get') {
-      const callback = function (val) {
+      const callback = function (val: any) {
         self.send(method, val, listener)
       }
       func.call(this, callback)
     } else {
       func.call(this, value)
     }
+
+    return true
   }
 
-  on (event, callback) {
+  on(event: string, callback: Function): void {
     this.methods[event] = callback
   }
 
-  send (event, value, listener) {
+  send(event: string, value?: any, listener?: string | null): boolean {
     console.debug('Receiver.send', event, value, listener)
 
     if (this.reject) {
@@ -153,7 +165,7 @@ class Receiver {
       return false
     }
 
-    const data = {
+    const data: any = {
       context: core.CONTEXT,
       version: core.VERSION,
       event
@@ -169,10 +181,12 @@ class Receiver {
 
     const msg = JSON.stringify(data)
     window.parent.postMessage(msg, this.origin === '' ? '*' : this.origin)
+
+    return true
   }
 
-  emit (event, value) {
-    if (!Object.hasOwn(this.eventListeners, event)) {
+  emit(event: string, value?: any): boolean {
+    if (!Object.prototype.hasOwnProperty.call(this.eventListeners, event)) {
       return false
     }
 
@@ -186,7 +200,7 @@ class Receiver {
     return true
   }
 
-  ready () {
+  ready(): void {
     console.debug('Receiver.ready')
     this.isReady = true
 

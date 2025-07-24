@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const packageProperties = require('./package.json')
 
-const { banner, entry, externals, rules } = require('./webpack.config.js')
+const { banner, entry, externals, rules, resolve } = require('./webpack.config.js')
 
 module.exports = {
   mode: 'development',
@@ -14,6 +14,7 @@ module.exports = {
   },
   entry,
   externals,
+  resolve,
   output: {
     path: path.resolve('./dist/debug'),
     // for dev-server

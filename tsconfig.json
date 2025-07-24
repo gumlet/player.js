@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "declarationDir": "dist",
+    "module": "ESNext",
+    "target": "ES2017",
+    "lib": ["ES2022", "DOM"],
+    "jsx": "react",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowJs": false,
+    "strict": true,
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}

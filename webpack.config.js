@@ -9,20 +9,25 @@ const banner =
         '\n' +
         packageProperties.name + ' version ' + packageProperties.version + '\n'
 
-const entry = './src/main.js'
+const entry = './src/main.ts'
 
 const rules = [{
-  test: /\.js$/,
+  test: /\.ts$/,
   exclude: /node_modules/,
-  loader: 'babel-loader'
+  use: 'ts-loader'
 }]
 
 const externals = {
+}
+
+const resolve = {
+  extensions: ['.ts', '.js']
 }
 
 module.exports = {
   banner,
   entry,
   externals,
-  rules
+  rules,
+  resolve
 }

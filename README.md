@@ -42,6 +42,41 @@ install via npm :
 npm install @gumlet/player.js
 ```
 
+TypeScript Support
+------------------
+
+Player.js v2.0.16+ includes full TypeScript support with type definitions included. The library is written in TypeScript and provides comprehensive type safety:
+
+```typescript
+import playerjs from '@gumlet/player.js';
+
+const player = new playerjs.Player('iframe');
+
+player.on('ready', () => {
+  player.on('play', () => {
+    console.log('play');
+  });
+
+  player.getDuration((duration: number) => console.log(duration));
+
+  if (player.supports('method', 'mute')) {
+    player.mute();
+  }
+
+  player.play();
+});
+```
+
+### Type Definitions
+
+The library exports the following main types:
+
+- `Player` - Main player class for controlling embedded players
+- `Receiver` - For implementing player.js support in your own iframe
+- `MockAdapter`, `HTML5Adapter`, `VideoJSAdapter` - Adapter classes for different player types
+
+All methods and events are fully typed, providing excellent IDE support and compile-time error checking.
+
 Ready
 -----
 

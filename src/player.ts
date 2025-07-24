@@ -5,16 +5,32 @@
 */
 import core from './core'
 import Keeper from './keeper'
+import { PlayerData, ReadyData, EventCallback, MethodCallback } from './types'
 
-const READIED = []
+const READIED: string[] = []
 
 class Player {
-  constructor (elem, debug = false) {
+  public READIED: string[]
+  public elem: HTMLIFrameElement
+  public debug: boolean
+  public origin: string
+  public keeper: Keeper
+  public isReady: boolean
+  public queue: PlayerData[]
+  public events: string[]
+  public methods: string[]
+  public loaded?: boolean
+
+  constructor(elem: string | HTMLIFrameElement, debug: boolean = false) {
     const self = this
     this.READIED = READIED
 
     if (core.isString(elem)) {
-      elem = document.getElementById(elem)
+      const element = document.getElementById(elem) as HTMLIFrameElement
+      if (!element) {
+        throw new Error(`Element with id "${elem}" not found`)
+      }
+      elem = element
     }
 
     this.elem = elem
@@ -43,7 +59,7 @@ class Player {
 
     if (core.POST_MESSAGE) {
       // Set up the reciever.
-      core.addEvent(window, 'message', function (e) {
+      core.addEvent(window, 'message', function (e: MessageEvent) {
         self.receive(e)
       })
     } else {
@@ -61,7 +77,7 @@ class Player {
     }
   }
 
-  send (data, callback, ctx) {
+  send(data: PlayerData, callback?: MethodCallback, ctx?: any): boolean {
     // Add the context and version to the data.
     data.context = core.CONTEXT
     data.version = core.VERSION
@@ -75,7 +91,7 @@ class Player {
       data.listener = id
 
       // Only hang on to this listener once.
-      this.keeper.one(id, data.method, callback, ctx)
+      this.keeper.one(id, data.method || '', callback, ctx)
     }
 
     if (!this.isReady && data.value !== 'ready') {
@@ -90,14 +106,14 @@ class Player {
       console.debug('Player.send', data, this.origin)
     }
 
-    if (this.loaded === true) {
+    if (this.loaded === true && this.elem.contentWindow) {
       this.elem.contentWindow.postMessage(JSON.stringify(data), this.origin)
     }
 
     return true
   }
 
-  receive (e) {
+  receive(e: MessageEvent): boolean {
     if (this.debug) {
       console.debug('Player.receive', e)
     }
@@ -106,7 +122,7 @@ class Player {
       return false
     }
 
-    let data
+    let data: any
     try {
       data = JSON.parse(e.data)
     } catch (err) {
@@ -121,15 +137,17 @@ class Player {
 
     // We need to determine if we are ready.
     if (data.event === 'ready' && data.value && data.value.src === this.elem.src) {
-      this.ready(data)
+      this.ready(data as ReadyData)
     }
 
     if (this.keeper.has(data.event, data.listener)) {
       this.keeper.execute(data.event, data.listener, data.value, this)
     }
+
+    return true
   }
 
-  ready (data) {
+  ready(data: ReadyData): boolean {
     if (this.isReady === true) {
       return false
     }
@@ -155,14 +173,16 @@ class Player {
       }
 
       if (data.event === 'ready') {
-        this.keeper.execute(obj.event, obj.listener, true, this)
+        this.keeper.execute(obj.event || '', obj.listener, true, this)
       }
       this.send(obj)
     }
     this.queue = []
+
+    return true
   }
 
-  on (event, callback, ctx) {
+  on(event: string, callback: EventCallback, ctx?: any): boolean {
     const id = core.generateUUID()
 
     if (event === 'ready') {
@@ -181,7 +201,7 @@ class Player {
     return true
   }
 
-  off (event, callback) {
+  off(event: string, callback?: EventCallback): boolean {
     const listeners = this.keeper.off(event, callback)
     if (this.debug) {
       console.debug('Player.off', listeners)
@@ -203,7 +223,7 @@ class Player {
 
   // Based on what ready passed back, we can determine if the events/method are
   // supported by the player.
-  supports (evtOrMethod, names) {
+  supports(evtOrMethod: 'event' | 'method', names: string | string[]): boolean {
     core.assert(['method', 'event'].includes(evtOrMethod),
       'evtOrMethod needs to be either "event" or "method" got ' + evtOrMethod)
 
@@ -220,43 +240,56 @@ class Player {
 
     return true
   }
+
+  // Dynamic method generation will be added via the prototype modification below
+  play?(): void
+  pause?(): void
+  getPaused?(callback: MethodCallback): void
+  mute?(): void
+  unmute?(): void
+  getMuted?(callback: MethodCallback): void
+  setVolume?(volume: number): void
+  getVolume?(callback: MethodCallback): void
+  getDuration?(callback: MethodCallback): void
+  setCurrentTime?(time: number): void
+  getCurrentTime?(callback: MethodCallback): void
+  setLoop?(loop: boolean): void
+  getLoop?(callback: MethodCallback): void
+  setPlaybackRate?(rate: number): void
+  getPlaybackRate?(callback: MethodCallback): void
 }
 
 // create function to add to the Player prototype
-function createPrototypeFunction (name) {
-  return function () {
-    const data = {
+function createPrototypeFunction(name: string) {
+  return function (this: Player, ...args: any[]) {
+    const data: PlayerData = {
       method: name
     }
-
-    let args = Array.prototype.slice.call(arguments)
 
     // for getters add the passed parameters to the arguments for the send call
     if (/^get/.test(name)) {
       core.assert(args.length > 0, 'Get methods require a callback.')
-      args.unshift(data)
+      this.send(data, args[0], args[1])
     } else {
       // for setter add the first arg to the value field
       if (/^set/.test(name)) {
         core.assert(args.length !== 0, 'Set methods require a value.')
         data.value = args[0]
       }
-      args = [data]
+      this.send(data)
     }
-
-    this.send.apply(this, args)
   }
 }
 
 // Loop through the methods to add them to the prototype.
 for (const methodName of core.METHODS.all()) {
-  if (!Object.hasOwn(Player.prototype, methodName)) {
-    Player.prototype[methodName] = createPrototypeFunction(methodName)
+  if (!Object.prototype.hasOwnProperty.call(Player.prototype, methodName)) {
+    (Player.prototype as any)[methodName] = createPrototypeFunction(methodName)
   }
 }
 
-core.addEvent(window, 'message', function (e) {
-  let data
+core.addEvent(window, 'message', function (e: MessageEvent) {
+  let data: any
   try {
     data = JSON.parse(e.data)
   } catch (err) {
