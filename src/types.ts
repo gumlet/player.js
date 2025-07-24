@@ -84,6 +84,10 @@ export interface ReadyData {
 export type EventCallback = (data?: any) => void
 export type MethodCallback = (value?: any) => void
 
+// Promise-based method return types
+export type GetMethodPromise<T = any> = Promise<T>
+export type SetMethodPromise = Promise<void>
+
 export interface SupportedFeatures {
   events: string[]
   methods: string[]

@@ -5,7 +5,7 @@
 */
 import core from './core'
 import Keeper from './keeper'
-import { PlayerData, ReadyData, EventCallback, MethodCallback } from './types'
+import { PlayerData, ReadyData, EventCallback, MethodCallback, GetMethodPromise, SetMethodPromise } from './types'
 
 const READIED: string[] = []
 
@@ -242,41 +242,85 @@ class Player {
   }
 
   // Dynamic method generation will be added via the prototype modification below
-  play?(): void
-  pause?(): void
+  // Method overloads for both promise and callback styles
+  
+  // Play/Pause methods (no return value needed)
+  play?(): Promise<void>
+  pause?(): Promise<void>
+  mute?(): Promise<void>
+  unmute?(): Promise<void>
+  
+  // Getter methods with overloads
+  getPaused?(): GetMethodPromise<boolean>
   getPaused?(callback: MethodCallback): void
-  mute?(): void
-  unmute?(): void
+  
+  getMuted?(): GetMethodPromise<boolean>
   getMuted?(callback: MethodCallback): void
-  setVolume?(volume: number): void
+  
+  getVolume?(): GetMethodPromise<number>
   getVolume?(callback: MethodCallback): void
+  
+  getDuration?(): GetMethodPromise<number>
   getDuration?(callback: MethodCallback): void
-  setCurrentTime?(time: number): void
+  
+  getCurrentTime?(): GetMethodPromise<number>
   getCurrentTime?(callback: MethodCallback): void
-  setLoop?(loop: boolean): void
+  
+  getLoop?(): GetMethodPromise<boolean>
   getLoop?(callback: MethodCallback): void
-  setPlaybackRate?(rate: number): void
+  
+  getPlaybackRate?(): GetMethodPromise<number>
   getPlaybackRate?(callback: MethodCallback): void
+  
+  // Setter methods
+  setVolume?(volume: number): SetMethodPromise
+  setCurrentTime?(time: number): SetMethodPromise
+  setLoop?(loop: boolean): SetMethodPromise
+  setPlaybackRate?(rate: number): SetMethodPromise
 }
 
 // create function to add to the Player prototype
 function createPrototypeFunction(name: string) {
-  return function (this: Player, ...args: any[]) {
+  return function (this: Player, ...args: any[]): any {
     const data: PlayerData = {
       method: name
     }
 
-    // for getters add the passed parameters to the arguments for the send call
+    // for getters, check if callback is provided or return a promise
     if (/^get/.test(name)) {
-      core.assert(args.length > 0, 'Get methods require a callback.')
-      this.send(data, args[0], args[1])
+      // If a callback is provided, use callback style
+      if (args.length > 0 && typeof args[0] === 'function') {
+        const callback = args[0]
+        this.send(data, callback, args[1])
+        return
+      } else {
+        // Return a promise
+        return new Promise((resolve, reject) => {
+          this.send(data, (value: any) => {
+            resolve(value)
+          })
+        })
+      }
     } else {
-      // for setter add the first arg to the value field
+      // for setters and action methods, return a promise
       if (/^set/.test(name)) {
         core.assert(args.length !== 0, 'Set methods require a value.')
         data.value = args[0]
       }
-      this.send(data)
+      
+      // For action methods (play, pause, mute, unmute) and setters, return promise
+      return new Promise<void>((resolve, reject) => {
+        // For action methods, we don't need to wait for a response
+        if (['play', 'pause', 'mute', 'unmute'].includes(name)) {
+          this.send(data)
+          resolve()
+        } else {
+          // For setters, we might want to wait for confirmation
+          this.send(data, () => {
+            resolve()
+          })
+        }
+      })
     }
   }
 }

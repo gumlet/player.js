@@ -12,18 +12,20 @@ spec.
 ```js
 const player = new playerjs.Player('iframe');
 
-player.on('ready', () => {
+player.on('ready', async () => {
   player.on('play', () => {
     console.log('play');
   });
 
-  player.getDuration(duration => console.log(duration));
+  // Promise-based API
+  const duration = await player.getDuration();
+  console.log(duration);
 
   if (player.supports('method', 'mute')) {
-    player.mute();
+    await player.mute();
   }
 
-  player.play();
+  await player.play();
 });
 ```
 
@@ -52,19 +54,44 @@ import playerjs from '@gumlet/player.js';
 
 const player = new playerjs.Player('iframe');
 
-player.on('ready', () => {
-  player.on('play', () => {
-    console.log('play');
-  });
-
-  player.getDuration((duration: number) => console.log(duration));
-
-  if (player.supports('method', 'mute')) {
-    player.mute();
+player.on('ready', async () => {
+  // Promise-based API (recommended)
+  try {
+    const duration = await player.getDuration();
+    console.log(`Duration: ${duration} seconds`);
+    
+    if (player.supports('method', 'mute')) {
+      await player.mute();
+    }
+    
+    await player.play();
+  } catch (error) {
+    console.error('Player error:', error);
   }
-
-  player.play();
+  
+  // Callback-based API (backward compatibility)
+  player.getDuration((duration: number) => {
+    console.log(`Duration: ${duration} seconds`);
+  });
 });
+```
+
+### Promise-Based API
+
+All player methods now return promises, making it easier to work with async/await patterns:
+
+```typescript
+// Get multiple values concurrently
+const [duration, currentTime, volume] = await Promise.all([
+  player.getDuration(),
+  player.getCurrentTime(),
+  player.getVolume()
+]);
+
+// Chain operations
+await player.setCurrentTime(10);
+await player.setVolume(75);
+await player.play();
 ```
 
 ### Type Definitions
@@ -135,43 +162,107 @@ At this point we can reasonably assume that the iframe's been loaded and
 the ready. Player.js will take care of listening for ready events that
 were fired before the player is set up.
 
+API Styles
+----------
+
+Player.js supports both modern promise-based and traditional callback-based APIs:
+
+### Promise-Based API (Recommended)
+
+All methods return promises, enabling clean async/await patterns:
+
+```js
+// Modern async/await style
+player.on('ready', async () => {
+  try {
+    const duration = await player.getDuration();
+    const currentTime = await player.getCurrentTime();
+    
+    await player.setVolume(50);
+    await player.play();
+  } catch (error) {
+    console.error('Player error:', error);
+  }
+});
+
+// Promise chains
+player.getDuration()
+  .then(duration => console.log(`Duration: ${duration}`))
+  .then(() => player.play())
+  .catch(error => console.error(error));
+```
+
+### Callback-Based API (Backward Compatibility)
+
+Traditional callback style is still supported:
+
+```js
+player.on('ready', () => {
+  player.getDuration(duration => {
+    console.log(`Duration: ${duration}`);
+    player.play();
+  });
+});
+```
+
 Methods
 -------
 
-`play`: void
+`play`: Promise<void>
 Play the media:
 
 ```js
+// Promise-based
+await player.play();
+
+// Callback-based (legacy)
 player.play();
 ```
 
-`pause`: void
+`pause`: Promise<void>
 Pause the media:
 
 ```js
+// Promise-based
+await player.pause();
+
+// Callback-based (legacy)
 player.pause();
 ```
 
-`getPaused`: boolean
+`getPaused`: Promise<boolean> | void
 Determine if the media is paused:
 
 ```js
+// Promise-based
+const isPaused = await player.getPaused();
+console.log('paused:', isPaused);
+
+// Callback-based
 player.getPaused(function(value){
   console.log('paused:', value);
 });
 ```
 
-`mute`: void
+`mute`: Promise<void>
 Mute the media:
 
 ```js
+// Promise-based
+await player.mute();
+
+// Callback-based (legacy)
 player.mute();
 ```
 
-`unmute`: void
+`unmute`: Promise<void>
 Unmute the media:
 
 ```js
+// Promise-based
+await player.unmute();
+
+// Callback-based (legacy)
 player.unmute();
 ```
 
