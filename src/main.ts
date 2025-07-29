@@ -4,6 +4,7 @@ import Receiver from './receiver'
 import MockAdapter from './adapters/mock'
 import VideoJSAdapter from './adapters/video'
 import HTML5Adapter from './adapters/html'
+import { PlayerMethods } from './types'
 
 interface PlayerJS {
   Player: typeof Player
@@ -13,7 +14,7 @@ interface PlayerJS {
   HTML5Adapter: typeof HTML5Adapter
   CONTEXT: string
   VERSION: string
-  METHODS: any
+  METHODS: PlayerMethods
   addEvent: typeof core.addEvent
 }
 

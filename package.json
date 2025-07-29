@@ -1,11 +1,17 @@
 {
   "title": "Player.js",
   "name": "@gumlet/player.js",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "homepage": "http://github.com/gumlet/player.js",
-  "main": "dist/player.min.js",
-  "module": "dist/player.min.js",
-  "types": "dist/src/main.d.ts",
+  "type": "module",
+  "main": "dist/main.cjs",
+  "browser": "dist/main.global.js",
+  "module": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "exports": {
+    "import": "./dist/main.js",
+    "require": "./dist/main.cjs"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/gumlet/player.js.git"
@@ -15,11 +21,11 @@
     "url": "https://www.gumlet.com/"
   },
   "scripts": {
-    "build:debug": "webpack --progress --config webpack.config.debug.js",
-    "build:release": "webpack --progress --config webpack.config.release.js",
+    "build:debug": "tsup --watch",
+    "build:release": "tsup",
     "build:ts": "tsc",
     "type-check": "tsc --noEmit",
-    "prepublishOnly": "tsc --noEmit && webpack --progress --config webpack.config.release.js"
+    "prepublishOnly": "tsc --noEmit && tsup"
   },
   "files": [
     "dist/*"
@@ -31,11 +37,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "esbuild": "^0.25.0",
-    "generate-json-webpack-plugin": "^2.0.0",
-    "ts-loader": "^9.0.0",
-    "typescript": "^5.0.0",
-    "webpack": "^5.100.2",
-    "webpack-cli": "^6.0.1"
+    "tsup": "^8.5.0",
+    "typescript": "^5.0.0"
   }
 }
