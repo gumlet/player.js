@@ -25,7 +25,11 @@ class Receiver {
     this.isReady = false
 
     // Bind the window message.
-    this.origin = (new URL(document.referrer)).origin
+    if (document.referrer) {
+      this.origin = (new URL(document.referrer)).origin
+    } else {
+      this.origin = '*'
+    }
 
     // Create a holder for all the methods.
     this.methods = {}
