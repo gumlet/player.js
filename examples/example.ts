@@ -67,7 +67,7 @@ receiver.on('play', function() {
   this.emit('play')
 })
 
-receiver.on('getDuration', function(callback: (duration: number) => void) {
+receiver.on('getDuration', (callback: (duration: number) => void) => {
   // Return your video duration
   callback(120) // 2 minutes
 })

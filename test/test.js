@@ -6,7 +6,7 @@ const FRAMES = [
   'http://localhost:8080/test/video.html'
 ]
 
-const removeEvent = function (elem, type, eventHandle) {
+const removeEvent = (elem, type, eventHandle) => {
   if (!elem) { return }
   if (elem.removeEventListener) {
     elem.removeEventListener(type, eventHandle, false)
@@ -38,10 +38,10 @@ function testCases (hooks) {
     })
   })
 
-  QUnit.test('Play', function (assert) {
+  QUnit.test('Play', (assert) => {
     const done1 = assert.async(3)
     let count = 0
-    const done = function () {
+    const done = () => {
       count++
       if (count === 2) {
         // Revert us back to the opening bell.
@@ -70,7 +70,7 @@ function testCases (hooks) {
     player.play()
   })
 
-  QUnit.test('Pause', function (assert) {
+  QUnit.test('Pause', (assert) => {
     const done = assert.async()
     player.on('pause', function () {
       assert.true(true, 'video has paused')
@@ -79,7 +79,7 @@ function testCases (hooks) {
     })
 
     // We won't fire pause unless we are actually playing first.
-    player.on('play', function () {
+    player.on('play', () => {
       player.off('play')
       player.pause()
     })
@@ -88,9 +88,9 @@ function testCases (hooks) {
   })
 
   // Make sure we are receiving context.
-  QUnit.test('context', function (assert) {
+  QUnit.test('context', (assert) => {
     const done = assert.async()
-    const onMessage = function (e) {
+    const onMessage = (e) => {
       const data = JSON.parse(e.data)
       assert.equal(data.context, window.playerjs.CONTEXT)
       assert.equal(data.version, window.playerjs.VERSION)
@@ -101,24 +101,24 @@ function testCases (hooks) {
     window.playerjs.addEvent(window, 'message', onMessage)
 
     // This will force the receiver to echo.
-    player.on('ready', function () {})
+    player.on('ready', () => {})
   })
 
   // Test to make sure we can attach multiple listeners to the same event.
-  QUnit.test('multi-listeners', function (assert) {
+  QUnit.test('multi-listeners', (assert) => {
     const doneTest = assert.async(3)
     // Callbacks.
-    const zero = function () {
+    const zero = () => {
       assert.true(true, 'play 0 fired')
       doneTest(0)
     }
 
-    const one = function () {
+    const one = () => {
       assert.true(true, 'play 1 fired')
       doneTest(1)
     }
 
-    const two = function () {
+    const two = () => {
       assert.true(true, 'play 2 fired')
       doneTest(2)
       player.off('play')
@@ -132,38 +132,38 @@ function testCases (hooks) {
     player.play()
   })
 
-  QUnit.test('getPaused', function (assert) {
+  QUnit.test('getPaused', (assert) => {
     const done = assert.async()
 
     player.pause()
-    player.getPaused(function (value) {
+    player.getPaused((value) => {
       assert.true(value, 'video is paused')
       done()
     })
   })
 
-  QUnit.test('Duration', function (assert) {
+  QUnit.test('Duration', (assert) => {
     const done = assert.async()
-    player.getDuration(function (value) {
+    player.getDuration((value) => {
       assert.equal(value, 6.4)
       done()
     })
   })
 
-  QUnit.test('getCurrentTime', function (assert) {
+  QUnit.test('getCurrentTime', (assert) => {
     const done = assert.async()
-    player.getCurrentTime(function (value) {
+    player.getCurrentTime((value) => {
       assert.true(typeof value === 'number', 'video has time:' + value)
       done()
     })
   })
 
-  QUnit.test('setCurrentTime', function (assert) {
+  QUnit.test('setCurrentTime', (assert) => {
     const done = assert.async()
-    player.on('timeupdate', function (v) {
+    player.on('timeupdate', (v) => {
       if (v.seconds >= 5) {
         player.off('timeupdate')
-        player.getCurrentTime(function (value) {
+        player.getCurrentTime((value) => {
           assert.equal(Math.floor(value), 5)
           player.pause()
           done()
@@ -175,42 +175,42 @@ function testCases (hooks) {
     player.setCurrentTime(5)
   })
 
-  QUnit.test('setLoop', function (assert) {
+  QUnit.test('setLoop', (assert) => {
     const done = assert.async()
     player.setLoop(true)
-    setTimeout(function () {
-      player.getLoop(function (v) {
+    setTimeout(() => {
+      player.getLoop((v) => {
         assert.true(v, 'Set Loop was not set')
         done()
       })
     }, 100)
   })
 
-  QUnit.test('getVolume', function (assert) {
+  QUnit.test('getVolume', (assert) => {
     const done = assert.async()
-    player.getVolume(function (value) {
+    player.getVolume((value) => {
       assert.true(typeof value === 'number', 'video has Volume')
       done()
     })
   })
 
   // Volumne tests
-  QUnit.test('get/set volume', function (assert) {
+  QUnit.test('get/set volume', (assert) => {
     const done = assert.async()
     player.setVolume(87)
-    player.getVolume(function (value) {
+    player.getVolume((value) => {
       assert.equal(value, 87, 'video volume:' + value)
       done()
     })
   })
 
-  QUnit.test('get muted', function (assert) {
+  QUnit.test('get muted', (assert) => {
     const done = assert.async()
     // Mute
     player.mute()
 
-    setTimeout(function () {
-      player.getMuted(function (value) {
+    setTimeout(() => {
+      player.getMuted((value) => {
         assert.true(value, 'video muted:' + value)
         done()
       })

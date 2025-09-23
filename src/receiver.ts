@@ -8,7 +8,7 @@
 */
 
 import core from './core'
-import { SupportedFeatures, EventCallback, MethodCallback } from './types'
+import type { SupportedFeatures } from './types'
 
 class Receiver {
   public isReady: boolean
@@ -19,7 +19,6 @@ class Receiver {
   public reject: boolean
 
   constructor(events?: string[], methods?: string[]) {
-    const self = this
 
     // Deal with the ready crap.
     this.isReady = false
@@ -48,8 +47,8 @@ class Receiver {
 
     // We aren't in an iframe, don't listen.
     if (!this.reject) {
-      core.addEvent(window, 'message', function (e: MessageEvent) {
-        self.receive(e)
+      core.addEvent(window, 'message', (e: MessageEvent) => {
+        this.receive(e)
       })
     }
   }
@@ -98,7 +97,7 @@ class Receiver {
 
     // Add Event Listener.
     if (data.method === 'addEventListener') {
-      if (Object.prototype.hasOwnProperty.call(this.eventListeners, data.value)) {
+      if (Object.hasOwn(this.eventListeners, data.value)) {
         // If the listener is the same, i.e. null only add it once.
         if (!this.eventListeners[data.value].includes(listener)) {
           this.eventListeners[data.value].push(listener)
@@ -111,7 +110,7 @@ class Receiver {
         this.ready()
       }
     } else if (data.method === 'removeEventListener') { // Remove the event listener.
-      if (Object.prototype.hasOwnProperty.call(this.eventListeners, data.value)) {
+      if (Object.hasOwn(this.eventListeners, data.value)) {
         const index = this.eventListeners[data.value].indexOf(listener)
 
         // if we find the element, remove it.
@@ -131,10 +130,9 @@ class Receiver {
   }
 
   get(method: string, value: any, listener: string | null): boolean {
-    const self = this
 
     // Now lets do it.
-    if (!Object.prototype.hasOwnProperty.call(this.methods, method)) {
+    if (!Object.hasOwn(this.methods, method)) {
       this.emit('error', {
         code: 3,
         msg: 'Method Not Supported "' + method + '"'
@@ -145,8 +143,8 @@ class Receiver {
     const func = this.methods[method]
 
     if (method.substr(0, 3) === 'get') {
-      const callback = function (val: any) {
-        self.send(method, val, listener)
+      const callback = (val: any) => {
+        this.send(method, val, listener)
       }
       func.call(this, callback)
     } else {
@@ -190,7 +188,7 @@ class Receiver {
   }
 
   emit(event: string, value?: any): boolean {
-    if (!Object.prototype.hasOwnProperty.call(this.eventListeners, event)) {
+    if (!Object.hasOwn(this.eventListeners, event)) {
       return false
     }
 

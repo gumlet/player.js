@@ -1,4 +1,4 @@
-import { PlayerEvents, PlayerMethods, Core } from './types'
+import type { PlayerEvents, PlayerMethods, Core } from './types'
 
 const core: Core = {
   EVENTS: {
@@ -67,7 +67,7 @@ const core: Core = {
   },
 
   has(obj: object, key: string): boolean {
-    return Object.prototype.hasOwnProperty.call(obj, key)
+    return  Object.hasOwn(obj, key)
   },
 
   addEvent(elem: any, type: string, eventHandle: (e: any) => void): void {
@@ -75,9 +75,9 @@ const core: Core = {
     if (elem.addEventListener) {
       elem.addEventListener(type, eventHandle, false)
     } else if (elem.attachEvent) {
-      elem.attachEvent('on' + type, eventHandle)
+      elem.attachEvent(`on${type}`, eventHandle)
     } else {
-      elem['on' + type] = eventHandle
+      elem[`on${type}`] = eventHandle
     }
   },
 
@@ -92,7 +92,7 @@ const core: Core = {
   },
 
   generateUUID(): string {
-    if (crypto && crypto.randomUUID) {
+    if (crypto?.randomUUID) {
       return crypto.randomUUID()
     } else {
       const url = URL.createObjectURL(new Blob())

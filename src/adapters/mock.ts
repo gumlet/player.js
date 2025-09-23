@@ -27,14 +27,14 @@ class MockAdapter {
       duration: 20,
       currentTime: 0,
       interval: null,
-      timeupdate: function () {},
+      timeupdate: () => {},
       volume: 100,
       mute: false,
       playing: false,
       loop: false,
       playbackRate: 1,
-      play: function () {
-        video.interval = setInterval(function () {
+      play: () => {
+        video.interval = setInterval(() => {
           video.currentTime += 0.25
           video.timeupdate({
             seconds: video.currentTime,
@@ -43,7 +43,7 @@ class MockAdapter {
         }, 250)
         video.playing = true
       },
-      pause: function () {
+      pause: () => {
         if (video.interval) {
           clearInterval(video.interval)
         }
@@ -52,14 +52,14 @@ class MockAdapter {
     }
 
     // Set up the actual receiver
-    const receiver = this.receiver = new Receiver()
+    const receiver = new Receiver()
+    this.receiver = receiver
 
     receiver.on('play', function (this: Receiver) {
-      const self = this
       video.play()
       this.emit('play')
-      video.timeupdate = function (data: { seconds: number; duration: number }) {
-        self.emit('timeupdate', data)
+      video.timeupdate = (data: { seconds: number; duration: number }) => {
+        this.emit('timeupdate', data)
       }
     })
 
@@ -68,56 +68,56 @@ class MockAdapter {
       this.emit('pause')
     })
 
-    receiver.on('getPaused', function (callback: (isPaused: boolean) => void) {
+    receiver.on('getPaused', (callback: (isPaused: boolean) => void) => {
       const isPaused = !video.playing
       callback(isPaused)
     })
 
-    receiver.on('getCurrentTime', function (callback: (time: number) => void) {
+    receiver.on('getCurrentTime', (callback: (time: number) => void) => {
       callback(video.currentTime)
     })
 
-    receiver.on('setCurrentTime', function (value: number) {
+    receiver.on('setCurrentTime', (value: number) => {
       video.currentTime = value
     })
 
-    receiver.on('getDuration', function (callback: (duration: number) => void) {
+    receiver.on('getDuration', (callback: (duration: number) => void) => {
       callback(video.duration)
     })
 
-    receiver.on('getVolume', function (callback: (volume: number) => void) {
+    receiver.on('getVolume', (callback: (volume: number) => void) => {
       callback(video.volume)
     })
 
-    receiver.on('setVolume', function (value: number) {
+    receiver.on('setVolume', (value: number) => {
       video.volume = value
     })
 
-    receiver.on('mute', function () {
+    receiver.on('mute', () => {
       video.mute = true
     })
 
-    receiver.on('unmute', function () {
+    receiver.on('unmute', () => {
       video.mute = false
     })
 
-    receiver.on('getMuted', function (callback: (muted: boolean) => void) {
+    receiver.on('getMuted', (callback: (muted: boolean) => void) => {
       callback(video.mute)
     })
 
-    receiver.on('getLoop', function (callback: (loop: boolean) => void) {
+    receiver.on('getLoop', (callback: (loop: boolean) => void) => {
       callback(video.loop)
     })
 
-    receiver.on('setLoop', function (value: boolean) {
+    receiver.on('setLoop', (value: boolean) => {
       video.loop = value
     })
 
-    receiver.on('setPlaybackRate', function (value: number) {
+    receiver.on('setPlaybackRate', (value: number) => {
       video.playbackRate = value
     })
 
-    receiver.on('getPlaybackRate', function (callback: (rate: number) => void) {
+    receiver.on('getPlaybackRate', (callback: (rate: number) => void) => {
       callback(video.playbackRate)
     })
   }

@@ -5,7 +5,7 @@
 */
 import core from './core'
 import Keeper from './keeper'
-import { PlayerData, ReadyData, EventCallback, MethodCallback, GetMethodPromise, SetMethodPromise } from './types'
+import type { PlayerData, ReadyData, EventCallback, MethodCallback, GetMethodPromise, SetMethodPromise } from './types'
 
 const READIED: string[] = []
 
@@ -22,7 +22,6 @@ class Player {
   public loaded?: boolean
 
   constructor(elem: string | HTMLIFrameElement, debug: boolean = false) {
-    const self = this
     this.READIED = READIED
 
     if (core.isString(elem)) {
@@ -59,8 +58,8 @@ class Player {
 
     if (core.POST_MESSAGE) {
       // Set up the reciever.
-      core.addEvent(window, 'message', function (e: MessageEvent) {
-        self.receive(e)
+      core.addEvent(window, 'message', (e: MessageEvent) => {
+        this.receive(e)
       })
     } else {
       console.error('Post Message is not Available.')
@@ -68,11 +67,11 @@ class Player {
 
     // See if we caught the src event first, otherwise assume we haven't loaded
     if (READIED.includes(elem.src)) {
-      self.loaded = true
+      this.loaded = true
     } else {
       // Try the onload event, just lets us give another test.
-      this.elem.onload = function () {
-        self.loaded = true
+      this.elem.onload = () => {
+        this.loaded = true
       }
     }
   }
@@ -125,7 +124,7 @@ class Player {
     let data: any
     try {
       data = JSON.parse(e.data)
-    } catch (err) {
+    } catch (_err) {
       // Not a valid response.
       return false
     }
@@ -295,7 +294,7 @@ function createPrototypeFunction(name: string) {
         return
       } else {
         // Return a promise
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           this.send(data, (value: any) => {
             resolve(value)
           })
@@ -309,7 +308,7 @@ function createPrototypeFunction(name: string) {
       }
       
       // For action methods (play, pause, mute, unmute) and setters, return promise
-      return new Promise<void>((resolve, reject) => {
+      return new Promise<void>((resolve) => {
         // For action methods, we don't need to wait for a response
         if (['play', 'pause', 'mute', 'unmute'].includes(name)) {
           this.send(data)
@@ -327,16 +326,16 @@ function createPrototypeFunction(name: string) {
 
 // Loop through the methods to add them to the prototype.
 for (const methodName of core.METHODS.all()) {
-  if (!Object.prototype.hasOwnProperty.call(Player.prototype, methodName)) {
+  if (!Object.hasOwn(Player.prototype, methodName)) {
     (Player.prototype as any)[methodName] = createPrototypeFunction(methodName)
   }
 }
 
-core.addEvent(window, 'message', function (e: MessageEvent) {
+core.addEvent(window, 'message', (e: MessageEvent) => {
   let data: any
   try {
     data = JSON.parse(e.data)
-  } catch (err) {
+  } catch (_err) {
     return false
   }
 

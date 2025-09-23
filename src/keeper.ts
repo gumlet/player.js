@@ -2,7 +2,7 @@
 * Keeper is just a method for keeping track of all the callbacks.
 */
 import core from './core'
-import { KeeperData, EventCallback } from './types'
+import type { KeeperData, EventCallback } from './types'
 
 class Keeper {
   private data: { [event: string]: KeeperData[] }
@@ -12,7 +12,7 @@ class Keeper {
   }
 
   has(event: string, id?: string): boolean {
-    if (!Object.prototype.hasOwnProperty.call(this.data, event)) {
+    if (!Object.hasOwn(this.data, event)) {
       return false
     }
 
@@ -105,7 +105,7 @@ class Keeper {
     // We should probably restructure so this is a bit less of a pain.
     const listeners: string[] = []
 
-    if (!Object.prototype.hasOwnProperty.call(this.data, event)) {
+    if (!Object.hasOwn(this.data, event)) {
       return listeners
     }
 

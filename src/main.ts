@@ -4,7 +4,7 @@ import Receiver from './receiver'
 import MockAdapter from './adapters/mock'
 import VideoJSAdapter from './adapters/video'
 import HTML5Adapter from './adapters/html'
-import { PlayerMethods } from './types'
+import type { PlayerMethods } from './types'
 
 interface PlayerJS {
   Player: typeof Player
