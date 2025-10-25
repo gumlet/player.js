@@ -25,7 +25,8 @@
     "build:release": "tsup",
     "build:ts": "tsc",
     "type-check": "tsc --noEmit",
-    "prepublishOnly": "tsc --noEmit && tsup"
+    "prepublishOnly": "tsc --noEmit && tsup",
+    "lint": "biome lint"
   },
   "files": [
     "dist/*"
