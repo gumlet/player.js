@@ -9,6 +9,7 @@
 
 import core from './core'
 import type { SupportedFeatures } from './types'
+import Logger from './logger'
 
 class Receiver {
   public isReady: boolean
@@ -17,11 +18,15 @@ class Receiver {
   public supported: SupportedFeatures
   public eventListeners: { [event: string]: (string | null)[] }
   public reject: boolean
+  public debug: boolean
+  private logger: Logger
 
-  constructor(events?: string[], methods?: string[]) {
-
+  constructor(events?: string[], methods?: string[], debug: boolean = false) {
+  
     // Deal with the ready crap.
     this.isReady = false
+    this.debug = debug
+    this.logger = new Logger(debug)
 
     // Bind the window message.
     if (document.referrer) {
@@ -67,11 +72,11 @@ class Receiver {
       try {
         data = window.JSON.parse(e.data)
       } catch (err) {
-        console.error('JSON Parse Error', err)
+        this.logger.error('JSON Parse Error', err)
       }
     }
 
-    console.debug('Receiver.receive', e, data)
+    this.logger.debug('Receiver.receive', e, data)
 
     // Nothing for us to do.
     if (!data.method) {
@@ -159,11 +164,11 @@ class Receiver {
   }
 
   send(event: string, value?: any, listener?: string | null): boolean {
-    console.debug('Receiver.send', event, value, listener)
+    this.logger.debug('Receiver.send', event, value, listener)
 
     if (this.reject) {
       // We are not in a frame, or we don't support POST_MESSAGE
-      console.error('Receiver.send.reject', event, value, listener)
+      this.logger.error('Receiver.send.reject', event, value, listener)
       return false
     }
 
@@ -192,7 +197,7 @@ class Receiver {
       return false
     }
 
-    console.debug('Instance.emit', event, value, this.eventListeners[event])
+    this.logger.debug('Receiver.emit', event, value, this.eventListeners[event])
 
     for (let i = 0; i < this.eventListeners[event].length; i++) {
       const listener = this.eventListeners[event][i]
@@ -203,7 +208,7 @@ class Receiver {
   }
 
   ready(): void {
-    console.debug('Receiver.ready')
+    this.logger.debug('Receiver.ready')
     this.isReady = true
 
     const data = {

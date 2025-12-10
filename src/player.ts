@@ -6,6 +6,7 @@
 import core from './core'
 import Keeper from './keeper'
 import type { PlayerData, ReadyData, EventCallback, MethodCallback, GetMethodPromise, SetMethodPromise } from './types'
+import Logger from './logger'
 
 const READIED: string[] = []
 
@@ -13,6 +14,7 @@ class Player {
   public READIED: string[]
   public elem: HTMLIFrameElement
   public debug: boolean
+  private logger: Logger
   public origin: string
   public keeper: Keeper
   public isReady: boolean
@@ -35,6 +37,7 @@ class Player {
     this.elem = elem
 
     this.debug = debug
+    this.logger = new Logger(debug)
 
     // make sure we have an iframe
     core.assert(elem.nodeName === 'IFRAME',
@@ -62,7 +65,7 @@ class Player {
         this.receive(e)
       })
     } else {
-      console.error('Post Message is not Available.')
+      this.logger.error('Post Message is not Available.')
     }
 
     // See if we caught the src event first, otherwise assume we haven't loaded
@@ -94,16 +97,12 @@ class Player {
     }
 
     if (!this.isReady && data.value !== 'ready') {
-      if (this.debug) {
-        console.debug('Player.queue', data)
-      }
+      this.logger.debug('Player.queue', data)
       this.queue.push(data)
       return false
     }
 
-    if (this.debug) {
-      console.debug('Player.send', data, this.origin)
-    }
+    this.logger.debug('Player.send', data, this.origin)
 
     if (this.loaded === true && this.elem.contentWindow) {
       this.elem.contentWindow.postMessage(JSON.stringify(data), this.origin)
@@ -113,9 +112,7 @@ class Player {
   }
 
   receive(e: MessageEvent): boolean {
-    if (this.debug) {
-      console.debug('Player.receive', e)
-    }
+    this.logger.debug('Player.receive', e)
 
     if (e.origin !== this.origin) {
       return false
@@ -167,9 +164,7 @@ class Player {
     for (let i = 0; i < this.queue.length; i++) {
       const obj = this.queue[i]
 
-      if (this.debug) {
-        console.debug('Player.dequeue', obj)
-      }
+      this.logger.debug('Player.dequeue', obj)
 
       if (data.event === 'ready') {
         this.keeper.execute(obj.event || '', obj.listener, true, this)
@@ -202,9 +197,7 @@ class Player {
 
   off(event: string, callback?: EventCallback): boolean {
     const listeners = this.keeper.off(event, callback)
-    if (this.debug) {
-      console.debug('Player.off', listeners)
-    }
+    this.logger.debug('Player.off', listeners)
 
     if (listeners.length > 0) {
       for (const i in listeners) {
