@@ -38,7 +38,7 @@
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
-    "@types/node": "^24.3.0",
+    "@types/node": "^25.1.0",
     "tsup": "^8.5.0",
     "typescript": "^5.0.0"
   }
