@@ -144,10 +144,12 @@ function testCases (hooks) {
 
   QUnit.test('Duration', (assert) => {
     const done = assert.async()
-    player.getDuration((value) => {
-      assert.equal(value, 6.4)
-      done()
-    })
+    setTimeout(() => {
+      player.getDuration((value) => {
+        assert.equal(value, 6.4)
+        done()
+      })
+    }, 300)
   })
 
   QUnit.test('getCurrentTime', (assert) => {
@@ -215,6 +217,26 @@ function testCases (hooks) {
         done()
       })
     }, 500)
+  })
+
+
+  QUnit.test('getPlaybackRate', (assert) => {
+    const done = assert.async()
+    player.getPlaybackRate((rate) => {
+      assert.true(typeof rate === 'number', 'video has playback rate')
+      done()
+    })
+  })
+
+  QUnit.test('setPlaybackRate', (assert) => {
+    const done = assert.async()
+    player.setPlaybackRate(2)
+    setTimeout(() => {
+      player.getPlaybackRate((rate) => {
+        assert.equal(rate, 2, `video playback rate: ${rate}`)
+        done()
+      })
+    }, 100)
   })
 }
 

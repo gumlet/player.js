@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <link href="//vjs.zencdn.net/4.2/video-js.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/video.js@8.23.7/dist/video-js.css" rel="stylesheet">
 </head>
 <body>
   <video id="video" class="video-js vjs-default-skin"
-    controls muted preload="auto">
+    controls muted preload="metadata">
    <source src="https://gumlet.sgp1.digitaloceanspaces.com/unittest_videos/playerjs-demo.mp4" type='video/mp4' />
   </video>
-  <script src="//vjs.zencdn.net/4.2/video.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/video.js@8.23.7/dist/video.js"></script>
   <script src="/dist/main.global.js"></script>
   <script>
-    videojs("video", {}, function(){
-      var adapter = new playerjs.VideoJSAdapter(this);
+    document.addEventListener('DOMContentLoaded', () => {
+      videojs("video", {}, function(){
+        var adapter = new playerjs.VideoJSAdapter(this);
 
-      adapter.ready();
+        adapter.ready();
+      });
     });
   </script>
 </body>

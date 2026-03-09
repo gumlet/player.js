@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-
 </head>
 <body>
-  <video id='video' preload="none" muted="muted">
+  <video id='video' preload="metadata" muted="muted">
     <source src="https://gumlet.sgp1.digitaloceanspaces.com/unittest_videos/playerjs-demo.mp4" type="video/mp4">
   </video>
   <script src="/dist/main.global.js"></script>
   <script>
-    var video = document.getElementById('video');
-    video.load();
+    document.addEventListener('DOMContentLoaded', () => {
+      var video = document.getElementById('video');
+      video.load();
 
-    var adapter = new playerjs.HTML5Adapter(video);
+      var adapter = new playerjs.HTML5Adapter(video);
 
-    adapter.ready();
+      adapter.ready();
+    });
   </script>
 </body>
 </html>
