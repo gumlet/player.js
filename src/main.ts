@@ -18,6 +18,20 @@ interface PlayerJS {
   addEvent: typeof core.addEvent
 }
 
+export type {
+  PlayerEvents,
+  PlayerMethods,
+  PlayerData,
+  ReadyData,
+  EventCallback,
+  MethodCallback,
+  GetMethodPromise,
+  SetMethodPromise,
+  SupportedFeatures,
+} from './types'
+
+export type { PlayerJS }
+
 const playerjs: PlayerJS = {
   Player,
   Receiver,
