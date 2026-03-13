@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
 
 export default defineConfig((options) => ( {
   entry: ['src/main.ts'],
@@ -6,5 +6,8 @@ export default defineConfig((options) => ( {
   sourcemap: true,
   dts: true,
   clean: true,
+  outputOptions: {
+    name: 'playerjs',
+  },
   minify: !options.watch,
 }))
