@@ -49,10 +49,6 @@ declare global {
   }
 }
 
-if (typeof window !== 'undefined') {
-  window.playerjs = playerjs
-}
-
 export { Player, Receiver, VideoJSAdapter, HTML5Adapter }
 
 export default playerjs
