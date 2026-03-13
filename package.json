@@ -1,15 +1,15 @@
 {
   "title": "Player.js",
   "name": "@gumlet/player.js",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "homepage": "http://github.com/gumlet/player.js",
   "type": "module",
   "main": "dist/main.cjs",
   "browser": "dist/main.global.js",
-  "module": "dist/main.js",
-  "types": "dist/main.d.ts",
+  "module": "dist/main.mjs",
+  "types": "dist/main.d.mts",
   "exports": {
-    "import": "./dist/main.js",
+    "import": "./dist/main.mjs",
     "require": "./dist/main.cjs"
   },
   "repository": {
@@ -25,7 +25,6 @@
     "build:release": "tsdown",
     "build:ts": "tsc",
     "type-check": "tsc --noEmit",
-    "prepublishOnly": "tsc --noEmit && tsdown",
     "lint": "biome lint"
   },
   "files": [
