@@ -30,8 +30,6 @@ export type {
   SupportedFeatures,
 } from './types'
 
-export type { PlayerJS }
-
 const playerjs: PlayerJS = {
   Player,
   Receiver,
@@ -54,5 +52,7 @@ declare global {
 if (typeof window !== 'undefined') {
   window.playerjs = playerjs
 }
+
+export { Player, Receiver, VideoJSAdapter, HTML5Adapter }
 
 export default playerjs
