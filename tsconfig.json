@@ -4,7 +4,7 @@
     "emitDeclarationOnly": false,
     "declarationDir": "dist",
     "module": "ESNext",
-    "target": "ES2017",
+    "target": "es2020",
     "lib": ["ES2022", "DOM"],
     "jsx": "react",
     "moduleResolution": "bundler",

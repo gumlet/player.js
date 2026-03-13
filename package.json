@@ -21,11 +21,11 @@
     "url": "https://www.gumlet.com/"
   },
   "scripts": {
-    "build:debug": "tsup --watch",
-    "build:release": "tsup",
+    "build:debug": "tsdown --watch",
+    "build:release": "tsdown",
     "build:ts": "tsc",
     "type-check": "tsc --noEmit",
-    "prepublishOnly": "tsc --noEmit && tsup",
+    "prepublishOnly": "tsc --noEmit && tsdown",
     "lint": "biome lint"
   },
   "files": [
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
     "@types/node": "^24.3.0",
-    "tsup": "^8.5.0",
+    "tsdown": "^0.21.2",
     "typescript": "^5.0.0"
   }
 }
