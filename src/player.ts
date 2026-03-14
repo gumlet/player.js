@@ -8,6 +8,8 @@ import Keeper from './keeper'
 import type { PlayerData, ReadyData, EventCallback, MethodCallback, GetMethodPromise, SetMethodPromise } from './types'
 import Logger from './logger'
 
+const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined'
+
 const READIED: string[] = []
 
 class Player {
@@ -27,6 +29,9 @@ class Player {
     this.READIED = READIED
 
     if (core.isString(elem)) {
+      if (!isBrowser) {
+        throw new Error('Cannot resolve element by id during SSR. Use the iframe element reference after hydration.')
+      }
       const element = document.getElementById(elem) as HTMLIFrameElement
       if (!element) {
         throw new Error(`Element with id "${elem}" not found`)
@@ -59,11 +64,13 @@ class Player {
     this.events = core.EVENTS.all()
     this.methods = core.METHODS.all()
 
-    if (core.POST_MESSAGE) {
+    if (isBrowser && core.POST_MESSAGE) {
       // Set up the reciever.
       core.addEvent(window, 'message', (e: MessageEvent) => {
         this.receive(e)
       })
+    } else if (!isBrowser) {
+      this.logger.error('Post Message is not available during SSR.')
     } else {
       this.logger.error('Post Message is not Available.')
     }
@@ -324,23 +331,25 @@ for (const methodName of core.METHODS.all()) {
   }
 }
 
-core.addEvent(window, 'message', (e: MessageEvent) => {
-  let data: any
-  try {
-    data = JSON.parse(e.data)
-  } catch (_err) {
-    return false
-  }
+if (isBrowser) {
+  core.addEvent(window, 'message', (e: MessageEvent) => {
+    let data: any
+    try {
+      data = JSON.parse(e.data)
+    } catch (_err) {
+      return false
+    }
 
-  // abort if this message wasn't a player.js message
-  if (data.context !== core.CONTEXT) {
-    return false
-  }
+    // abort if this message wasn't a player.js message
+    if (data.context !== core.CONTEXT) {
+      return false
+    }
 
-  // We need to determine if we are ready.
-  if (data.event === 'ready' && data.value && data.value.src) {
-    READIED.push(data.value.src)
-  }
-})
+    // We need to determine if we are ready.
+    if (data.event === 'ready' && data.value && data.value.src) {
+      READIED.push(data.value.src)
+    }
+  })
+}
 
 export default Player

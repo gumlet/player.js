@@ -30,17 +30,10 @@ export type {
   SupportedFeatures,
 } from './types'
 
-const playerjs: PlayerJS = {
-  Player,
-  Receiver,
-  MockAdapter,
-  VideoJSAdapter,
-  HTML5Adapter,
-  CONTEXT: core.CONTEXT,
-  VERSION: core.VERSION,
-  METHODS: core.METHODS,
-  addEvent: core.addEvent
-}
+const CONTEXT = core.CONTEXT
+const VERSION = core.VERSION
+const METHODS = core.METHODS
+const addEvent = core.addEvent
 
 // Attach to the window object explicitly
 declare global {
@@ -49,6 +42,5 @@ declare global {
   }
 }
 
-export { Player, Receiver, VideoJSAdapter, HTML5Adapter }
+export { Player, Receiver, VideoJSAdapter, HTML5Adapter, CONTEXT, VERSION, METHODS, addEvent }
 
-export default playerjs

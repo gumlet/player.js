@@ -27,7 +27,7 @@ const core: Core = {
     }
   } as PlayerEvents,
 
-  POST_MESSAGE: !!window.postMessage,
+  POST_MESSAGE: typeof window !== 'undefined' && !!window.postMessage,
 
   METHODS: {
     PLAY: 'play',
@@ -59,7 +59,7 @@ const core: Core = {
   } as PlayerMethods,
 
   DEBUG: false,
-  VERSION: '2.0',
+  VERSION: '3.0',
   CONTEXT: 'player.js',
 
   isString(obj: any): obj is string {

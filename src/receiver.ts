@@ -11,6 +11,8 @@ import core from './core'
 import type { SupportedFeatures } from './types'
 import Logger from './logger'
 
+const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined'
+
 class Receiver {
   public isReady: boolean
   public origin: string
@@ -28,8 +30,8 @@ class Receiver {
     this.debug = debug
     this.logger = new Logger(debug)
 
-    // Bind the window message.
-    if (document.referrer) {
+    // Bind the window message (skip on SSR).
+    if (isBrowser && document.referrer) {
       this.origin = (new URL(document.referrer)).origin
     } else {
       this.origin = '*'
@@ -47,11 +49,11 @@ class Receiver {
     // Deals with the adding and removing of event listeners.
     this.eventListeners = {}
 
-    // We can't send any messages.
-    this.reject = !(window.self !== window.top && core.POST_MESSAGE)
+    // We can't send any messages (or we're in SSR / not in iframe).
+    this.reject = !isBrowser || !(window.self !== window.top && core.POST_MESSAGE)
 
     // We aren't in an iframe, don't listen.
-    if (!this.reject) {
+    if (!this.reject && isBrowser) {
       core.addEvent(window, 'message', (e: MessageEvent) => {
         this.receive(e)
       })
@@ -70,7 +72,7 @@ class Receiver {
       data = e.data
     } else {
       try {
-        data = window.JSON.parse(e.data)
+        data = JSON.parse(e.data)
       } catch (err) {
         this.logger.error('JSON Parse Error', err)
       }
@@ -187,7 +189,9 @@ class Receiver {
     }
 
     const msg = JSON.stringify(data)
-    window.parent.postMessage(msg, this.origin === '' ? '*' : this.origin)
+    if (isBrowser) {
+      window.parent.postMessage(msg, this.origin === '' ? '*' : this.origin)
+    }
 
     return true
   }
@@ -212,7 +216,7 @@ class Receiver {
     this.isReady = true
 
     const data = {
-      src: window.location.toString(),
+      src: isBrowser ? window.location.toString() : '',
       events: this.supported.events,
       methods: this.supported.methods
     }
