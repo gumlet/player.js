@@ -11,9 +11,9 @@ const removeEvent = (elem, type, eventHandle) => {
   if (elem.removeEventListener) {
     elem.removeEventListener(type, eventHandle, false)
   } else if (elem.detachEvent) {
-    elem.detachEvent('on' + type, eventHandle)
+    elem.detachEvent(`on${type}`, eventHandle)
   } else {
-    elem['on' + type] = null
+    elem[`on${type}`] = null
   }
 }
 
@@ -26,7 +26,7 @@ function testCases (hooks) {
     const iframe = document.createElement('iframe')
 
     iframe.src = FRAMES[frameIndex]
-    iframe.id = 'iframe_' + frameIndex
+    iframe.id = `iframe_${frameIndex}`
     iframe.width = 400
     iframe.height = 400
     frameIndex++
@@ -155,7 +155,7 @@ function testCases (hooks) {
   QUnit.test('getCurrentTime', (assert) => {
     const done = assert.async()
     player.getCurrentTime((value) => {
-      assert.true(typeof value === 'number', 'video has time:' + value)
+      assert.true(typeof value === 'number', `video has time: ${value}`)
       done()
     })
   })
@@ -201,7 +201,7 @@ function testCases (hooks) {
     const done = assert.async()
     player.setVolume(87)
     player.getVolume((value) => {
-      assert.equal(value, 87, 'video volume:' + value)
+      assert.equal(value, 87, `video volume: ${value}`)
       done()
     })
   })
@@ -213,7 +213,7 @@ function testCases (hooks) {
 
     setTimeout(() => {
       player.getMuted((value) => {
-        assert.true(value, 'video muted:' + value)
+        assert.true(value, `video muted: ${value}`)
         done()
       })
     }, 500)

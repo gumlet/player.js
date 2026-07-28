@@ -1,7 +1,7 @@
 {
   "title": "Player.js",
   "name": "@gumlet/player.js",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "homepage": "http://github.com/gumlet/player.js",
   "type": "module",
   "main": "dist/main.cjs",
@@ -24,7 +24,7 @@
     "build:debug": "tsdown --watch",
     "build:release": "tsdown",
     "build:ts": "tsc",
-    "type-check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "lint": "biome lint"
   },
   "files": [
@@ -38,7 +38,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
     "@types/node": "^24.3.0",
-    "tsdown": "^0.21.2",
-    "typescript": "^5.0.0"
+    "tsdown": "^0.22.2",
+    "typescript": "^6.0.0"
   }
 }

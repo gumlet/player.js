@@ -3,7 +3,7 @@ import Receiver from '../receiver'
 interface MockVideo {
   duration: number
   currentTime: number
-  interval: NodeJS.Timeout | null
+  interval: ReturnType<typeof setInterval> | null
   timeupdate: (data: { seconds: number; duration: number }) => void
   volume: number
   mute: boolean

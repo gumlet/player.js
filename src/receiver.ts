@@ -8,8 +8,8 @@
 */
 
 import core from './core'
-import type { SupportedFeatures } from './types'
 import Logger from './logger'
+import type { SupportedFeatures } from './types'
 
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined'
 
@@ -94,7 +94,7 @@ class Receiver {
     if (!core.METHODS.all().includes(data.method)) {
       this.emit('error', {
         code: 2,
-        msg: 'Invalid Method "' + data.method + '"'
+        msg: `Invalid Method "${data.method}"`
       })
       return false
     }
@@ -142,14 +142,14 @@ class Receiver {
     if (!Object.hasOwn(this.methods, method)) {
       this.emit('error', {
         code: 3,
-        msg: 'Method Not Supported "' + method + '"'
+        msg: `Method Not Supported "${method}"`
       })
       return false
     }
 
     const func = this.methods[method]
 
-    if (method.substr(0, 3) === 'get') {
+    if (method.startsWith('get')) {
       const callback = (val: any) => {
         this.send(method, val, listener)
       }

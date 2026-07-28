@@ -1,4 +1,4 @@
-import type { PlayerEvents, PlayerMethods, Core } from './types'
+import type { Core, PlayerEvents, PlayerMethods } from './types'
 
 const core: Core = {
   EVENTS: {

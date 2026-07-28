@@ -5,8 +5,8 @@
 */
 import core from './core'
 import Keeper from './keeper'
-import type { PlayerData, ReadyData, EventCallback, MethodCallback, GetMethodPromise, SetMethodPromise } from './types'
 import Logger from './logger'
+import type { EventCallback, GetMethodPromise, MethodCallback, PlayerData, ReadyData, SetMethodPromise } from './types'
 
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined'
 
@@ -46,7 +46,7 @@ class Player {
 
     // make sure we have an iframe
     core.assert(elem.nodeName === 'IFRAME',
-      'playerjs.Player constructor requires an Iframe, got "' + elem.nodeName + '"')
+      `playerjs.Player constructor requires an Iframe, got "${elem.nodeName}"`)
     core.assert(elem.src,
       'playerjs.Player constructor requires a Iframe with a \'src\' attribute.')
 
@@ -224,7 +224,7 @@ class Player {
   // supported by the player.
   supports(evtOrMethod: 'event' | 'method', names: string | string[]): boolean {
     core.assert(['method', 'event'].includes(evtOrMethod),
-      'evtOrMethod needs to be either "event" or "method" got ' + evtOrMethod)
+      `evtOrMethod needs to be either "event" or "method" got ${evtOrMethod}`)
 
     // Make everything an array.
     names = core.isArray(names) ? names : [names]

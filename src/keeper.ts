@@ -2,7 +2,7 @@
 * Keeper is just a method for keeping track of all the callbacks.
 */
 import core from './core'
-import type { KeeperData, EventCallback } from './types'
+import type { EventCallback, KeeperData } from './types'
 
 class Keeper {
   private data: { [event: string]: KeeperData[] }

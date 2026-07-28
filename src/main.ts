@@ -1,9 +1,9 @@
+import HTML5Adapter from './adapters/html'
+import type MockAdapter from './adapters/mock'
+import VideoJSAdapter from './adapters/video'
 import core from './core'
 import Player from './player'
 import Receiver from './receiver'
-import MockAdapter from './adapters/mock'
-import VideoJSAdapter from './adapters/video'
-import HTML5Adapter from './adapters/html'
 import type { PlayerMethods } from './types'
 
 interface PlayerJS {
@@ -19,15 +19,9 @@ interface PlayerJS {
 }
 
 export type {
-  PlayerEvents,
-  PlayerMethods,
-  PlayerData,
-  ReadyData,
-  EventCallback,
-  MethodCallback,
-  GetMethodPromise,
-  SetMethodPromise,
-  SupportedFeatures,
+  EventCallback, GetMethodPromise, MethodCallback, PlayerData, PlayerEvents,
+  PlayerMethods, ReadyData, SetMethodPromise,
+  SupportedFeatures
 } from './types'
 
 const CONTEXT = core.CONTEXT
@@ -42,5 +36,5 @@ declare global {
   }
 }
 
-export { Player, Receiver, VideoJSAdapter, HTML5Adapter, CONTEXT, VERSION, METHODS, addEvent }
+export { addEvent, CONTEXT, HTML5Adapter, METHODS, Player, Receiver, VERSION, VideoJSAdapter }
 

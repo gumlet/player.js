@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "declaration": true,
     "emitDeclarationOnly": false,
     "declarationDir": "dist",
@@ -11,6 +12,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowJs": false,
+    "noEmit": true,
     "strict": true,
     "outDir": "dist"
   },
