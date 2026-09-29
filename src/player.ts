@@ -24,6 +24,8 @@ class Player {
   public events: string[]
   public methods: string[]
   public loaded?: boolean
+  private messageHandler: ((e: MessageEvent) => void) | null = null
+  private destroyed = false
 
   constructor(elem: string | HTMLIFrameElement, debug: boolean = false) {
     this.READIED = READIED
@@ -65,10 +67,11 @@ class Player {
     this.methods = core.METHODS.all()
 
     if (isBrowser && core.POST_MESSAGE) {
-      // Set up the reciever.
-      core.addEvent(window, 'message', (e: MessageEvent) => {
+      // Stable reference so destroy() can remove this listener.
+      this.messageHandler = (e: MessageEvent) => {
         this.receive(e)
-      })
+      }
+      core.addEvent(window, 'message', this.messageHandler)
     } else if (!isBrowser) {
       this.logger.error('Post Message is not available during SSR.')
     } else {
@@ -86,7 +89,32 @@ class Player {
     }
   }
 
+  /**
+   * Remove the window message listener and release callback state so the
+   * Player can be garbage-collected (important in SPAs that create many instances).
+   */
+  destroy(): void {
+    if (this.destroyed) {
+      return
+    }
+    this.destroyed = true
+
+    if (isBrowser && this.messageHandler) {
+      core.removeEvent(window, 'message', this.messageHandler)
+      this.messageHandler = null
+    }
+
+    this.elem.onload = null
+    this.queue = []
+    this.keeper.clear()
+    this.isReady = false
+  }
+
   send(data: PlayerData, callback?: MethodCallback, ctx?: any): boolean {
+    if (this.destroyed) {
+      return false
+    }
+
     // Add the context and version to the data.
     data.context = core.CONTEXT
     data.version = core.VERSION
@@ -119,6 +147,10 @@ class Player {
   }
 
   receive(e: MessageEvent): boolean {
+    if (this.destroyed) {
+      return false
+    }
+
     this.logger.debug('Player.receive', e)
 
     if (e.origin !== this.origin) {

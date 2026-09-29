@@ -16,6 +16,7 @@ interface PlayerJS {
   VERSION: string
   METHODS: PlayerMethods
   addEvent: typeof core.addEvent
+  removeEvent: typeof core.removeEvent
 }
 
 export type {
@@ -28,6 +29,7 @@ const CONTEXT = core.CONTEXT
 const VERSION = core.VERSION
 const METHODS = core.METHODS
 const addEvent = core.addEvent
+const removeEvent = core.removeEvent
 
 // Attach to the window object explicitly
 declare global {
@@ -36,5 +38,5 @@ declare global {
   }
 }
 
-export { addEvent, CONTEXT, HTML5Adapter, METHODS, Player, Receiver, VERSION, VideoJSAdapter }
+export { addEvent, CONTEXT, HTML5Adapter, METHODS, Player, Receiver, removeEvent, VERSION, VideoJSAdapter }
 

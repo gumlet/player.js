@@ -240,6 +240,61 @@ function testCases (hooks) {
   })
 }
 
+QUnit.module('Player.destroy', (hooks) => {
+  let player
+  let iframe
+
+  hooks.beforeEach(() => {
+    iframe = document.createElement('iframe')
+    iframe.src = FRAMES[0]
+    iframe.width = 1
+    iframe.height = 1
+    document.body.appendChild(iframe)
+    player = new window.playerjs.Player(iframe)
+  })
+
+  hooks.afterEach(() => {
+    // Safe if already destroyed.
+    player.destroy()
+    iframe.remove()
+  })
+
+  QUnit.test('destroy removes the window message listener', (assert) => {
+    const originalRemove = window.removeEventListener
+    let removedHandler = null
+
+    window.removeEventListener = function (type, handler, capture) {
+      if (type === 'message') {
+        removedHandler = handler
+      }
+      return originalRemove.call(this, type, handler, capture)
+    }
+
+    try {
+      player.destroy()
+      assert.true(typeof removedHandler === 'function', 'message listener was removed')
+    } finally {
+      window.removeEventListener = originalRemove
+    }
+  })
+
+  QUnit.test('destroy is idempotent and stops send/receive', (assert) => {
+    player.destroy()
+
+    assert.false(player.send({ method: 'play' }), 'send returns false after destroy')
+    assert.false(
+      player.receive({ origin: player.origin, data: '{}' }),
+      'receive returns false after destroy'
+    )
+    assert.equal(iframe.onload, null, 'onload cleared')
+    assert.false(player.isReady, 'isReady cleared')
+
+    // Second call must not throw.
+    player.destroy()
+    assert.true(true, 'second destroy does not throw')
+  })
+})
+
 // var count = 0,
 //   players = [];
 

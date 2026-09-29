@@ -48,6 +48,7 @@ export interface Core {
   isString(obj: any): obj is string
   has(obj: object, key: string): boolean
   addEvent(elem: any, type: string, eventHandle: (e: any) => void): void
+  removeEvent(elem: any, type: string, eventHandle: (e: any) => void): void
   isNone(obj: any): obj is null | undefined
   assert(test: any, msg?: string): asserts test
   generateUUID(): string

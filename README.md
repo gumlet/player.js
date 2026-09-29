@@ -262,6 +262,15 @@ player.off('play');
 player.off('play', playCallback);
 ```
 
+### `destroy(): void`
+Remove the player's `window` `message` listener and clear queued callbacks so the instance can be garbage-collected. Call this when tearing down a player in a single-page app (or anytime you no longer need the instance):
+
+```js
+player.destroy();
+```
+
+After `destroy()`, the player should not be used again.
+
 ### `on(event: string, callback: Function): void`
 Add an event listener:
 

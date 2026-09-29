@@ -130,6 +130,10 @@ class Keeper {
 
     return listeners
   }
+
+  clear(): void {
+    this.data = {}
+  }
 }
 
 export default Keeper
