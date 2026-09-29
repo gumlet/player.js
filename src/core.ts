@@ -16,6 +16,7 @@ const core: Core = {
     AUDIO_CHANGE: 'audioChange',
     QUALITY_CHANGE: 'qualityChange',
     VOLUME_CHANGE: 'volumeChange',
+    SUBTITLE_CHANGE: 'subtitleChange',
     all(): string[] {
       const all: string[] = []
       for (const key in core.EVENTS) {

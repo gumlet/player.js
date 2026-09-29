@@ -5,6 +5,12 @@ All notable changes to [@gumlet/player.js](https://github.com/gumlet/player.js) 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.10] - 2026-09-29
+
+### Added
+
+- Added `SUBTITLE_CHANGE: 'subtitleChange'` to `PlayerEvents`/`core.EVENTS` (`src/types.ts`, `src/core.ts`). Embeds can now emit and consumers can listen for subtitle/caption track changes (on/off/language switch), mirroring the existing `AUDIO_CHANGE`/`audioChange` event. Since `Receiver`'s default `supported.events` is `core.EVENTS.all()`, receivers constructed with no explicit events list (the common case) automatically advertise `subtitleChange` in the `ready()` handshake — no `Receiver` call-site changes required downstream. Documented in `README.md` under a new "Subtitle Events" section, alongside the existing `audioChange` example.
+
 ## [3.0.9] - 2026-07-28
 
 ### Changed

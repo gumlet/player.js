@@ -444,6 +444,18 @@ player.on('audioChange', (data) => {
 });
 ```
 
+### Subtitle Events
+
+#### `subtitleChange`
+Fired when the subtitle/caption track is turned on, off, or switched to a different language.
+
+```js
+player.on('subtitleChange', (data) => {
+  const { showing, language } = data;
+  console.log(showing ? `Subtitles on (${language})` : 'Subtitles off');
+});
+```
+
 ### Error Handling
 
 #### `error`

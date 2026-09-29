@@ -14,6 +14,7 @@ export interface PlayerEvents {
   AUDIO_CHANGE: 'audioChange'
   QUALITY_CHANGE: 'qualityChange'
   VOLUME_CHANGE: 'volumeChange'
+  SUBTITLE_CHANGE: 'subtitleChange'
   all(): string[]
 }
 
