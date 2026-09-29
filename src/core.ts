@@ -81,6 +81,17 @@ const core: Core = {
     }
   },
 
+  removeEvent(elem: any, type: string, eventHandle: (e: any) => void): void {
+    if (!elem) { return }
+    if (elem.removeEventListener) {
+      elem.removeEventListener(type, eventHandle, false)
+    } else if (elem.detachEvent) {
+      elem.detachEvent(`on${type}`, eventHandle)
+    } else {
+      elem[`on${type}`] = null
+    }
+  },
+
   isNone(obj: any): obj is null | undefined {
     return (obj === null || obj === undefined)
   },
